@@ -7,7 +7,7 @@ import sims.food.*;
 //import sims.gameObject.*;  // fyi I commented both gameObject and world imports because java does not compile if there are no classes inside
 import sims.gameEngine.*;
 import sims.needs.*;
-//import sims.world.*;
+import sims.world.*;
 import sims.actions.*;
 
 public class Gameplay {
