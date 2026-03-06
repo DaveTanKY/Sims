@@ -1,5 +1,8 @@
 package sims.world;
 
+import sims.entity.*;
+import java.util.Scanner;
+
 public abstract class Location {
     private final String name;
 
@@ -11,6 +14,6 @@ public abstract class Location {
         return name;
     }
 
-    public abstract void showOptions();
+    public abstract void showOptions(SimProfile sim);
 
 }

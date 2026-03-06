@@ -1,5 +1,9 @@
 package sims.world;
 
+import java.util.Scanner;
+import sims.entity.*;
+import sims.actions.*;
+
 public class Kitchen extends Location{
     public Kitchen(){
         super("Kitchen");

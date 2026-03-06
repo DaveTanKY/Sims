@@ -2,6 +2,7 @@ package sims.entity;
 
 import sims.needs.Needs;
 import sims.career.Career;
+import sims.world.Location;
 
 public abstract class SimProfile {
 
@@ -11,6 +12,7 @@ public abstract class SimProfile {
     /* encapsulation, child classes cannot see the Needs class so only SimProfile has access to
     the Needs class. This prevents the child classes from tampering with the Needs class.*/
     private Career career;
+    private Location room;
 
     public SimProfile(String name, Career career, Needs customNeeds){
         this.name = name;
@@ -44,5 +46,15 @@ public abstract class SimProfile {
         System.out.println("Hygiene: " + needs.getHygiene());
         System.out.println("Bladder: " + needs.getBladder());
     }
+
+    public void moveTo(Location room){
+        this.room = room;
+        System.out.println(name + " has have moved to " + room.getLocationName());
+    }
+
+    public Location getRoom(){
+        return room;
+    }
+
 
 }

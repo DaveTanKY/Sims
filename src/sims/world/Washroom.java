@@ -1,5 +1,9 @@
 package sims.world;
 
+import java.util.Scanner;
+import sims.entity.*;
+import sims.actions.*;
+
 public class Washroom extends Location{
     public Washroom(){
         super("Washroom");
