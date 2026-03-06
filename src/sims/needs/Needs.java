@@ -77,12 +77,12 @@ public class Needs {
 
 
     public void decay(){
-        this.setEnergy(energy - 6); // energy decreases over time
-        this.setSocial(social - 4); // social decreases over time
-        this.setHygiene(hygiene - 7); // hygiene decreases over time
-        this.setBladder(bladder + 5); // bladder increases over time
-        this.setHunger(hunger - 6); // hunger decreases over time
-        this.setFun(fun - 5); // fun decreases over time
+        this.setEnergy(energy - 9); // energy decreases over time
+        this.setSocial(social - 7); // social decreases over time
+        this.setHygiene(hygiene - 10); // hygiene decreases over time
+        this.setBladder(bladder + 8); // bladder increases over time
+        this.setHunger(hunger - 12); // hunger decreases over time
+        this.setFun(fun - 8); // fun decreases over time
     }
     // can implement some method like
     // updateNeeds() { needs.decay(); } if yall want

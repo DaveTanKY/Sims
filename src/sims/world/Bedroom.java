@@ -1,5 +1,6 @@
 package sims.world;
 
+import sims.gameEngine.*;
 import java.util.Scanner;
 import sims.entity.*;
 import sims.actions.*;
@@ -10,60 +11,66 @@ public class Bedroom extends Location{
     }
 
     @Override
-    public void showOptions(SimProfile currentSim){
-        Scanner scanner = new Scanner(System.in);
-        boolean inRoom = true;
+    public void showOptions() {
 
-        while(inRoom) {
-            System.out.println(" ");
-            System.out.println(" ");
-            System.out.println("What would you like to do?");
-            System.out.println("1. View Needs");
-            System.out.println("2. Go to sleep");
-            System.out.println("3. Go to the kitchen");
-            System.out.println("4. Go to the living room");
-            System.out.println("5. Go to the washroom");
-            System.out.println("6. Go to work");
+        System.out.println(" ");
+        System.out.println("1. View Needs");
+        System.out.println("2. Go to sleep");
+        System.out.println("3. Go to the kitchen");
+        System.out.println("4. Go to the living room");
+        System.out.println("5. Go to the washroom");
+        System.out.println("6. Go to work");
+        System.out.println("x. Terminate the game");
 
-            String choice  = scanner.nextLine();
+    }
 
-            switch(choice){
-                case "1": // show needs
+    @Override
+    public boolean handleLocActions(SimProfile currentSim, Scanner scanner) {
 
-                    currentSim.showNeeds();
-                    break;
+        System.out.println("What do you want " + currentSim.getName() + " to do?");
+        String actionChoice = scanner.nextLine();
 
-                case "2": // create a new Sleep action object from the SimAction parent class and execute the action as per action subclass
+        switch(actionChoice) {
+            case "1":
 
-                    new Sleep().execute(currentSim);
-                    break;
+                currentSim.showNeeds();
+                return true;
 
-                case "3": // go to the kitchen
+            case "2":
 
-                    currentSim.moveTo(new Kitchen());
-                    currentSim.getRoom().showOptions(currentSim);
-                    inRoom = false; // break out of the current room's loop
-                    break;
+                // action
+                return true;
 
-                case "4": // go to the living room
+            case "3":
 
-                    currentSim.moveTo(new LivingRoom());
-                    currentSim.getRoom().showOptions(currentSim);
-                    inRoom = false;
-                    break;
+                currentSim.moveTo(Gameplay.kitchen);
+                return false;
 
-                case "5": // go to the washroom
+            case "4":
 
-                    currentSim.moveTo(new Washroom());
-                    currentSim.getRoom().showOptions(currentSim);
-                    inRoom = false;
-                    break;
+                currentSim.moveTo(Gameplay.livingroom);
+                return false;
 
-                case "6": // go to work
-                    //
-                default:
-                    System.out.println("You can't do that!");
-            }
+            case "5":
+
+                currentSim.moveTo(Gameplay.washroom);
+                return false;
+
+            case "6":
+
+                //work action not done
+                return false;
+
+            case "x":
+
+                Gameplay.gameplay = false;
+                return false; // tells Gameplay to exit the inner inLocation loop
+
+            default:
+
+                System.out.println("I don't think your Sim can do that. Pick something else!");
+                return true; // stays within the current room loop
+
         }
     }
 }

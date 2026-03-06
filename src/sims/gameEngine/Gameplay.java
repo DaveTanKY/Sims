@@ -11,14 +11,22 @@ import sims.world.*;
 import sims.actions.*;
 
 public class Gameplay {
+    public static boolean gameplay = true;
+
+    // Instantiate all the locations here to be used in gameplay loop
+    // This avoids creation of a new location object at every location change
+    public static Location kitchen = new Kitchen();
+    public static Location bedroom = new Bedroom();
+    public static Location livingroom = new LivingRoom();
+    public static Location washroom = new Washroom();
+
     public static void main(String[] args){
 
         Scanner scanner = new Scanner(System.in);  // instantiate the scanner class
         SimProfile currentSim = null;
         SimAction action = null;
-        boolean gameplay = true;  // gameplay loop will always be true so it runs infinitely
 
-        // this segment of the code is to settle everything before the player commences
+
 
         while(currentSim == null){
             System.out.println("Select a Sim: ");
@@ -38,16 +46,27 @@ public class Gameplay {
             }
         }
 
-        System.out.println("What do you want to do first?");
-        System.out.println("1. View Needs");
-        System.out.println("2. Go to the kitchen");
-        System.out.println("3. Go to the bedroom");
-        System.out.println("4. Go to the living room");
-        System.out.println("5. Go to the washroom");
-        System.out.println("6. Go to work");
+
+        // current location is null at the start of the game because the Sim has not been assigned a location yet
+        Location currentLocation = null;
+
+
+
+        // everything above this line is to settle everything before the player commences
 
 
         while(gameplay){
+
+            // Gameplay starts here
+            System.out.println("-- Welcome to the Sims 4 CLI knockoff! --");
+            System.out.println("1. View Needs");
+            System.out.println("2. Go to the kitchen");
+            System.out.println("3. Go to the bedroom");
+            System.out.println("4. Go to the living room");
+            System.out.println("5. Go to the washroom");
+            System.out.println("6. Go to work");
+            System.out.println("x. Terminate the game");
+            System.out.println("Where do you want " + currentSim.getName() + " to go?");
 
             String locationChoice = scanner.nextLine();
 
@@ -55,76 +74,78 @@ public class Gameplay {
 
             switch(locationChoice){
                 case "1":
+
                     currentSim.showNeeds();
                     break;
+
                 case "2":
-                    Location kitchen = new Kitchen();
+
+                    currentLocation = kitchen;
                     currentSim.moveTo(kitchen);
-                    currentSim.getRoom().showOptions();
                     break;
+
                 case "3":
-                    Location bedroom = new Bedroom();
+
+                    currentLocation = bedroom;
                     currentSim.moveTo(bedroom);
-                    currentSim.getRoom().showOptions();
                     break;
+
                 case "4":
-                    Location livingroom = new LivingRoom();
+
+                    currentLocation = livingroom;
                     currentSim.moveTo(livingroom);
                     break;
+
                 case "5":
-                    Location washroom = new Washroom();
+
+                    currentLocation = washroom;
                     currentSim.moveTo(washroom);
                     break;
+
                 case "6":
-                    //
+
+                    // work is a WIP
                     break;
+
+                case "x":
+
+                    gameplay = false;
+                    System.out.println("Sorry to see you go but thank you for playing!");
+                    break;
+
                 default:
                     System.out.println("You can't do that!");
             }
 
 
-
-
-
-           // System.out.println("What would you want your Sim to do?");
-            //System.out.println("1. View Needs");
-            //System.out.println("2. Sleep");
-            // choice
-            // choice
-            // choice
-            // choice etc any actions yall want you can put here bah then update the switch case below accordingly
-
-           // String actionChoice = scanner.nextLine();
-           // SimAction action = null;
-
-            // polymorphism is being applied here as 'action' is the common variable, but it does completely different things
-            //switch(actionChoice){
-            //    case "1":
-             //       currentSim.showNeeds();
-           //         break;
-                  // at runtime, the currentSim variable points to a Sim object which inherits all the parents field/methods
-                    // showNeeds() is inherited from SimProfile
-             //   case "2":
-                   // action = new Sleep(); // creates a new 'Sleep' object and stores inside the 'action' variable
-              //      break;
-              //case
-
-              //case
-
-              //case ...
-
-
-
-
-
-            if (action != null){
-                action.execute(currentSim);   // interface only runs when the 'action' variable has a value
+            // Checks if player has chosen to exit the game
+            if (!gameplay) {
+                break;  // this will break the main gameplay loop and end the game
             }
 
+            if (currentLocation == null){ // when the user selects 1. View Needs initially, the game does not enter the location loop which prevents NullPointerException error
+                continue;
+            }
+
+            // This loop will run as long as the player is in the location, it will break when the player chooses to return to the navigation menu
+            boolean inLocation = true;
+            while (inLocation) {
+                System.out.println("\n-- " + currentLocation.getLocationName() + " Actions --");
+                // Show location options
+                currentLocation.showOptions();
+
+
+                // Location actions are handled in their respective classes, this is to avoid a long switch case in the gameplay class.
+                inLocation = currentLocation.handleLocActions(currentSim, scanner);
+
+                // Checking the needs decay - this does it after every action
+                //currentSim.getNeeds().decay();
+
+            }
 
         }// end of while(gameplay) loop
 
-
+        scanner.close();
 
     }// end of main() loop
 }// end of class

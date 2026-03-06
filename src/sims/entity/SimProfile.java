@@ -45,11 +45,12 @@ public abstract class SimProfile {
         System.out.println("Social: " + needs.getSocial());
         System.out.println("Hygiene: " + needs.getHygiene());
         System.out.println("Bladder: " + needs.getBladder());
+        System.out.println(" ");
     }
 
     public void moveTo(Location room){
         this.room = room;
-        System.out.println(name + " has have moved to " + room.getLocationName());
+        System.out.println(name + " has moved to the " + room.getLocationName());
     }
 
     public Location getRoom(){
