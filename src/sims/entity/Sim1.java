@@ -1,7 +1,6 @@
 package sims.entity;
 
 import sims.needs.Needs;
-import sims.career.Chef;
 
 public class Sim1 extends SimProfile{
 
