@@ -1,11 +1,9 @@
 package sims.gameEngine;
 
 import sims.actions.Activity;
+import sims.career.Career;
 import sims.entity.Sim;
-import sims.world.HomeLocation;
-import sims.world.HomeUpgrade;
-import sims.world.Loc;
-import sims.world.OutsideLocation;
+import sims.world.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,16 +46,22 @@ public class GameState {
         {
             case 0:
                 showMainMenu();
+                break;
             case 1:
                 showChooseSimMenu();
+                break;
             case 2:
                 showCreateMenu();
+                break;
             case 3:
                 showActionMenu();
+                break;
             case 4:
                 showMoveMenu();
+                break;
             case 5:
                 endGame();
+                break;
         }
     }
 
@@ -69,15 +73,17 @@ public class GameState {
         System.out.println("[2] Create Character");
         System.out.println("[3] End Game");
         int choice = readInt("Please input option : ", 3);
-        switch(choice){
+        switch(choice) {
             case 1:
                 gameState = 1;
+                break;
             case 2:
                 gameState = 2;
+                break;
             case 3:
                 gameState = 5;
+                break;
         }
-        update();
     }
 
     public void showChooseSimMenu()
@@ -97,7 +103,31 @@ public class GameState {
     }
 
     public void showCreateMenu() {
-        System.out.println("Ths is the create menu");
+        System.out.println("-------------SIM Creation--------------");
+        String name = readString("Please enter name of Sim: ");
+        int age = readInt("Please enter age of Sim: ");
+        System.out.println("[1] Sim does not have a job");
+        System.out.println("[2] Sim has a job");
+        int choice = readInt("Please enter choice accordingly: ");
+        Career career = new Career();
+        if(choice == 2)
+        {
+            career.setTitle(readString("Please enter job title: "));
+            career.setSector(readString("Please enter job sector: "));
+            career.setSalary(readInt("Please enter job salary: "));
+        }
+
+        System.out.println("Your Sim is being created!");
+        Home newHome = SimFactory.defaultHome(name);
+        Sim newSim = SimFactory.createSim(name, simList.size(), age, newHome, career);
+        simList.add(newSim);
+        currentSim = newSim;
+        gameState = 3;
+
+        //create house
+        //create career
+        //create sim with house and career
+
     }
 
     public void showActionMenu() {
@@ -109,10 +139,8 @@ public class GameState {
 
         System.out.println("\n-------------Please choose action for SIM--------------");
         System.out.println("\n[1] Move Location");
-
-        List<Activity> activityList = new ArrayList<>();
+        List<Activity> activityList = new ArrayList<>(currentSim.getLocation().getActivity());
         List<HomeUpgrade> upgradeOption = new ArrayList<>();
-        activityList = currentSim.getLocation().getActivity();
         if (currentSim.getLocation() instanceof HomeLocation) {
             List<HomeUpgrade> upgradeList = ((HomeLocation) currentSim.getLocation()).getUpgradeList();
             for (HomeUpgrade upgrade : upgradeList) {
@@ -125,18 +153,20 @@ public class GameState {
         }
         if (activityList != null) {
             for (int i = 0; i < activityList.size(); i++) {
-                System.out.print("[" + (i + 2) + "] " + activityList.get(i).getName() + " - " + activityList.get(i).getImpactedNeed() + " + " + activityList.get(i).getValue());
+                System.out.print("[" + (i + 2) + "] " + activityList.get(i).getName() + " - " + activityList.get(i).getImpactedNeed() + " + " + activityList.get(i).getValue() + "\n");
             }
         }
         int count = activityList.size() + 2;
         if (upgradeOption.size() > 0) {
-            System.out.println("\n\nPurchase Upgrades to unlock activities!");
+            System.out.println("\nPurchase Upgrades to unlock activities!");
             for (HomeUpgrade option : upgradeOption) {
                 System.out.println("[" + (count) + "] " + "Purchase " + option.getName() + " ( $" + option.getPrice() + " ) " + " to unlock \n" + option.getActivity().getName() + " : " + option.getActivity().getImpactedNeed() + " + " + option.getActivity().getValue() + "\n");
                 count += 1;
             }
         }
-        int choice = readInt("Input : ", activityList.size() + upgradeOption.size() + 1);
+
+        System.out.println("[" + (activityList.size()+upgradeOption.size()+2) + "] Exit to main menu");
+        int choice = readInt("Input : ", activityList.size() + upgradeOption.size() + 2);
 
         if(choice == 1)
         {
@@ -147,10 +177,15 @@ public class GameState {
             //execute activity list action
             Activity selectedActivity = activityList.get(choice - 2);
         }
-        else
+        else if(choice <= activityList.size() + upgradeOption.size() + 1)
         {
             //execute purchasing of upgrade
             HomeUpgrade selectedUpgrade = upgradeOption.get(choice - activityList.size()-2);
+            selectedUpgrade.purchaseUpgrade();
+        }
+        else
+        {
+            gameState = 0;
         }
     }
 
@@ -195,6 +230,30 @@ public class GameState {
         destination.moveTo(currentSim);
         gameState = 3;
         update();
+    }
+
+
+    public int readInt(String prompt)
+    {
+        System.out.println(prompt);
+        while (true) {
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input!");
+                scanner.nextLine();
+                System.out.println(prompt);
+                continue;
+            }
+
+            int value = scanner.nextInt();
+            scanner.nextLine();
+
+            if (value > 0) {
+                return value;
+            } else {
+                System.out.println("Input must be non negative!");
+                System.out.println(prompt);
+            }
+        }
     }
 
     public int readInt(String prompt, int options)
