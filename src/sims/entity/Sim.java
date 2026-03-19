@@ -96,12 +96,6 @@ public class Sim {
 
     public void performDecay(int duration, String need, Sim currentSim)
     {
-        String impactedNeed = "";
-        if(currentSim == this)
-        {
-            impactedNeed = need;//hunger
-        }
-
         for(Map.Entry<String , need> entry : needDict.entrySet())
         {
             if(currentSim == this)
