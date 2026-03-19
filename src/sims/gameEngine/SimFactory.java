@@ -30,19 +30,19 @@ public class SimFactory {
         Home home = new Home(name + "'s Home");
 
         //Hunger
-        Activity eatSandwich = new Activity("Sandwich", 30, "Hunger", 30);
+        Activity eatSandwich = new Activity("Sandwich", 10, "Hunger", 30);
         //Upgrades
         Activity eatPizza = new Activity("Pizza", 10, "Hunger", 40);
         Activity eatCake = new Activity("Pizza", 20, "Hunger", 50);
 
 
         //Fun
-        Activity watchTv = new Activity("Watch TV", 30, "Fun", 40);
+        Activity watchTv = new Activity("Watch TV", 20, "Fun", 40);
         //Upgrades
         Activity cardGames = new Activity("Play Card Games", 15, "Fun", 20);
 
         //Energy
-        Activity sleep = new Activity("Sleep",  100, "Energy", 80);
+        Activity sleep = new Activity("Sleep",  100, "Energy", 100);
         //Upgrades
         Activity nap = new Activity("Nap", 30, "Energy", 40);
         Activity drinkCoffee = new Activity("Coffee", 10, "Energy", 20);
@@ -54,7 +54,7 @@ public class SimFactory {
         Activity shower = new Activity("Shower", 20, "Hygiene", 80);
 
         //Bladder
-        Activity useToilet = new Activity("Use Toilet", 50, "Bladder", 100);
+        Activity useToilet = new Activity("Use Toilet", 10, "Bladder", 100);
 
         HomeLocation bathroom = new HomeLocation("Bathroom", home);
         HomeLocation livingRoom = new HomeLocation("Living Room", home);
@@ -111,12 +111,12 @@ public class SimFactory {
     public static Map<String, need> createNeeds ()
     {
         HashMap<String, need> needDict = new HashMap<>();
-        needDict.put("Hunger", new need());
-        needDict.put("Hygiene", new need());
-        needDict.put("Energy", new need());
-        needDict.put("Bladder", new need());
-        needDict.put("Fun", new need());
-        needDict.put("Social", new need());
+        needDict.put("Hunger", new need(0.2));
+        needDict.put("Hygiene", new need(0.01));
+        needDict.put("Energy", new need(0.3));
+        needDict.put("Bladder", new need(0.02));
+        needDict.put("Fun", new need(0.005));
+        needDict.put("Social", new need(0.003));
         return needDict;
     }
 }
