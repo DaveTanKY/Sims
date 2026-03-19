@@ -19,9 +19,19 @@ public class GameState {
     private boolean gameRunning = true;
     private int year = 2026;
     private int month = 1;
-    private int days = 1;
+    private int days = 0;
     private int hours = 0;
     private int minutes = 0;
+
+    public void startGame()
+    {
+        addSim(SimFactory.defaultGame());
+        addLocation(new OutsideLocation("Park", "none", "none"));
+        addLocation(new OutsideLocation("Gym", "none", "none"));
+        addLocation(new OutsideLocation("IT Office", "Title", "Developer"));
+        addLocation(new OutsideLocation("Server Room", "Sector", "IT"));
+        addLocation(new OutsideLocation("Studio Room", "Sector", "Media"));
+    }
 
     private Sim currentSim;
     private List<Sim> simList = new ArrayList<>();
@@ -181,11 +191,16 @@ public class GameState {
             //execute activity list action
             Activity selectedActivity = activityList.get(choice - 2);
             selectedActivity.performActivity(currentSim);
-            updateTime(selectedActivity.getDuration());
+
+            decayLoop(selectedActivity.getDuration(), selectedActivity.getImpactedNeed());
             for(Sim sim : simList)
             {
+                /*
                 sim.performDecay(selectedActivity.getDuration(), selectedActivity.getImpactedNeed(), currentSim);
+            */
             }
+
+            decayLoop(selectedActivity.getDuration(), selectedActivity.getImpactedNeed());
 
         }
         else if(choice <= activityList.size() + upgradeOption.size() + 1)
@@ -254,10 +269,8 @@ public class GameState {
                 System.out.println(prompt);
                 continue;
             }
-
             int value = scanner.nextInt();
             scanner.nextLine();
-
             if (value > 0) {
                 return value;
             } else {
@@ -304,14 +317,33 @@ public class GameState {
 
     public void showTime()
     {
-        String time = String.format("%02d-%02d-%04d %02d:%02d", days,month, year, hours, minutes);
-        System.out.println("Current Time: " + time);
+        String test = String.format("%02d:%02d", hours,minutes);
+        System.out.println("Current Time: " + test);
     }
 
-    public void updateTime(int duration)
+
+    public void decayLoop (int duration, String need)
     {
+        for(int i = 0; i < duration; i ++)
+        {
+            for(Sim sim : simList)
+            {
+                updateTime();
+                sim.performDecay(need, currentSim, getIntTime());
+            }
+        }
+    }
+
+    public int getIntTime()
+    {
+            return (days * 24) + (hours * 24) + (minutes);
+    }
+
+    public void updateTime()
+    {
+
         // Add minutes
-        minutes += duration;
+        minutes ++;
         // Carry over to hours
         hours += minutes / 60;
         minutes = minutes % 60;
