@@ -20,7 +20,7 @@ public class Activity {
     }
 
     public void performActivity(Sim sim) {
-        sim.setNeeds(impactedNeed, value);
+        sim.updateNeeds(impactedNeed, value);
     }
 
     public String getName() {
