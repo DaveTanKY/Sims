@@ -14,6 +14,16 @@ import java.util.Map;
 public class SimFactory {
     //simfactory to create home upgrades, home location, home and sim
 
+    public static Sim defaultGame()
+    {
+        Career career = new Career();
+        career.setTitle("Developer");
+        career.setSector("IT");
+        career.setSalary(5000);
+        Home newHome = defaultHome("Dave");
+        return createSim("Dave", 0, 24, newHome,career);
+    }
+
     public static Home defaultHome(String name)
     {
 
@@ -101,12 +111,12 @@ public class SimFactory {
     public static Map<String, need> createNeeds ()
     {
         HashMap<String, need> needDict = new HashMap<>();
-        needDict.put("Energy", new need());
-        needDict.put("Social", new need());
-        needDict.put("Hygiene", new need());
         needDict.put("Hunger", new need());
-        needDict.put("Fun", new need());
+        needDict.put("Hygiene", new need());
+        needDict.put("Energy", new need());
         needDict.put("Bladder", new need());
+        needDict.put("Fun", new need());
+        needDict.put("Social", new need());
         return needDict;
     }
 }
