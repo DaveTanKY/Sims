@@ -29,7 +29,7 @@ public class Main {
         Activity eatSandwich = new Activity("Sandwich", 30, "Hunger", 30);
         Activity eatPizza = new Activity("Pizza", 10, "Hunger", 40);
         Activity drinkCoffee = new Activity("Coffee", 10, "Energy", 20);
-        Activity eatCake = new Activity("Pizza", 20, "Hunger", 50);
+        Activity eatCake = new Activity("Cake", 20, "Hunger", 50);
         Activity watchTv = new Activity("Watch TV", 30, "Fun", 40);
         Activity sleep = new Activity("Sleep",  100, "Energy", 80);
         Activity nap = new Activity("Nap", 30, "Energy", 40);
