@@ -24,6 +24,7 @@ public class Sim {
     private Home home;
     private Loc currentLocation;
     private double bank;
+    private Map<Integer, Relationship> relationshipMap = new HashMap<>();
 
     public Sim(String name, int UUID, int age){
         this.name = name;
@@ -51,6 +52,15 @@ public class Sim {
     public void updateBank (double cost)
     {
         bank -= cost;
+    }
+
+    public void addRelationship(int uuid, Relationship relationship)
+    {
+        relationshipMap.put(uuid, relationship);
+    }
+
+    public Map<Integer, Relationship> getRelationshipMap() {
+        return relationshipMap;
     }
 
     public void updateNeeds(String need, double value) {
