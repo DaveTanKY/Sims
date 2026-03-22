@@ -19,7 +19,12 @@ public class OutsideLocation extends Loc{
 
     @Override
     public void moveTo(Sim sim) {
+        sim.getLocation().removeSim(sim);
         sim.setCurrentLocation(this);
+        if(!getLocSimList().contains(sim))
+        {
+            addSim(sim);
+        }
     }
 
     public String getComparison()
