@@ -11,17 +11,42 @@ public class Career{
     private String title;
     private String sector;
     private int salary;
+    private int level;
+    private int xp;
 
     public Career(){
         title = "Unemployed";
         sector = "Unemployed";
         salary = 0;
+        level = 1;
+        xp = 0;
     }
 
     public Career(String title, String sector, int salary) {
         this.title = title;
         this.sector = sector;
         this.salary = salary;
+        level = 1;
+        xp = 0;
+    }
+
+    public int getLevel()
+    {
+        return level;
+    }
+
+    public double getBonus()
+    {
+        return salary * ((double) level /100);
+    }
+    public void earnXP()
+    {
+        xp += 20;
+        if(xp >= 100)
+        {
+            level ++;
+            xp %= 100;
+        }
     }
 
     public String getTitle()
