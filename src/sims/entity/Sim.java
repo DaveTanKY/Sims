@@ -23,6 +23,7 @@ public class Sim {
     //inventory
     private Home home;
     private Loc currentLocation;
+    private double bank;
 
     public Sim(String name, int UUID, int age){
         this.name = name;
@@ -42,11 +43,28 @@ public class Sim {
         return needDict;
     }
 
+    public double getBank()
+    {
+        return bank;
+    }
+
+    public void updateBank (double cost)
+    {
+        bank -= cost;
+    }
+
     public void updateNeeds(String need, double value) {
         System.out.println(activityEnd);
         if(need != "Salary")
         {
             needDict.get(need).setValue(value);
+        }
+        else
+        {
+            System.out.println("Bank previous : " + bank);
+            bank += career.getSalary()+career.getBonus();
+            career.earnXP();
+            System.out.println("Bank after : " + bank);
         }
 
     }
@@ -107,8 +125,6 @@ public class Sim {
 
     public void performDecay(String need, Sim currentSim, int time)
     {
-
-
             for (Map.Entry<String, need> entry : needDict.entrySet()) {
                 if (currentSim == this) {
                     if (entry.getKey() != need) {
