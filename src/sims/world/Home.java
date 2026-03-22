@@ -25,6 +25,11 @@ public class Home extends Loc {
 
     @Override
     public void moveTo(Sim sim){
+        sim.getLocation().removeSim(sim);
         sim.setCurrentLocation(homeLocation.getFirst());
+        if(!getLocSimList().contains(sim))
+        {
+            addSim(sim);
+        }
     }
 }
