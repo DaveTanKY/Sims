@@ -26,14 +26,12 @@ public class SimFactory {
 
     public static Home defaultHome(String name)
     {
-
         Home home = new Home(name + "'s Home");
 
         //Hunger
         Activity eatSandwich = new Activity("Sandwich", 10, "Hunger", 30);
         //Upgrades
         Activity eatPizza = new Activity("Pizza", 10, "Hunger", 40);
-        Activity eatCake = new Activity("Pizza", 20, "Hunger", 50);
 
 
         //Fun
