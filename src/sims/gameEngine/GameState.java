@@ -26,16 +26,32 @@ public class GameState {
     public void startGame()
     {
         addSim(SimFactory.defaultGame());
-        addLocation(new OutsideLocation("Park", "none", "none"));
-        addLocation(new OutsideLocation("Gym", "none", "none"));
+
+
+
+
         addLocation(new OutsideLocation("IT Office", "Title", "Developer"));
         addLocation(new OutsideLocation("Server Room", "Sector", "IT"));
         addLocation(new OutsideLocation("Studio Room", "Sector", "Media"));
 
+
+        OutsideLocation gym = new OutsideLocation("Gym", "none", "none");
+        gym.addActivity(new Activity("Workout", 30, "Fun", 40));
+
+        OutsideLocation park = new OutsideLocation("Park", "none", "none");
+        park.addActivity(new Activity("Play ball games", 90, "Fun", 60));
+        park.addActivity(new Activity("Talk to friends", 60, "Social", 70));
+        addLocation(park);
+
+        OutsideLocation mall = new OutsideLocation("Mall", "none", "none");
+        mall.addActivity(new Activity("Eat at Restaurant", 90, "Hunger", 100, 200));
+        mall.addActivity(new Activity("Arcade", 30, "Fun", 40, 50));
+        mall.addActivity(new Activity("Watch Movie", 120, "Fun", 70, 100));
+        addLocation(mall);
+
         OutsideLocation work = new OutsideLocation("Office", "Title", "Developer");
         Activity workActivity = new Activity("Work", (8 * 60), "Salary", 0);
         work.addActivity(workActivity);
-
         addLocation(work);
     }
 
@@ -177,7 +193,7 @@ public class GameState {
             Activity activity = activityList.get(i);
             if(activity.getImpactedNeed() == "Salary")
             {
-                System.out.println("[" + (i + 2) + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " : " + getStringTime(activity.getDuration()) + " : $" + currentSim.getCareer().getSalary());
+                System.out.println("[" + (i + 2) + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " : " + getStringTime(activity.getDuration()) + " : $" + (currentSim.getCareer().getSalary() + currentSim.getCareer().getBonus()) +   " + ( Career Bonus : " + currentSim.getCareer().getLevel() + "% )");
             }
             else
             {
@@ -204,16 +220,35 @@ public class GameState {
         {
             //execute activity list action
             Activity selectedActivity = activityList.get(choice - 2);
-            selectedActivity.performActivity(currentSim);
 
-            decayLoop(selectedActivity.getDuration(), selectedActivity.getImpactedNeed());
+            if(currentSim.getBank() >= selectedActivity.getCost())
+            {
+                selectedActivity.performActivity(currentSim);
+                decayLoop(selectedActivity.getDuration(), selectedActivity.getImpactedNeed());
+            }
+            else
+            {
+                System.out.println("Insufficient Funds!");
+            }
 
         }
         else if(choice <= activityList.size() + upgradeOption.size() + 1)
         {
             //execute purchasing of upgrade
             HomeUpgrade selectedUpgrade = upgradeOption.get(choice - activityList.size()-2);
-            selectedUpgrade.purchaseUpgrade();
+            if(currentSim.getBank() >= selectedUpgrade.getPrice())
+            {
+                System.out.println(currentSim.getBank());
+                currentSim.updateBank(selectedUpgrade.getPrice());
+                System.out.println("After : " + currentSim.getBank());
+                selectedUpgrade.purchaseUpgrade();
+            }
+            else
+            {
+                System.out.println("Insufficient Funds!");
+            }
+
+
         }
         else
         {
