@@ -1,52 +1,159 @@
 package sims.career;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
-// PARENT CLASS
+/**
+ * Represents a career path for a Sim.
+ * A {@code Career} defines the Sim's job title, sector, salary, level, and experience points (XP).
+ * Sims can earn XP through work, which increases their career level and provides salary bonuses.
+ *
+ * <p>This class provides methods to manage career progression, calculate bonuses,
+ * and update career attributes such as title, sector, and salary.</p>
+ */
+public class Career{
 
-public abstract class Career{
-    protected String title;
-    protected int currentLevel = 0;
-    protected double income;
-    protected int energyCost;
-    protected int workHours;
-    protected List<String> ProgressionList;
+    /** The job title of the career. */
+    private String title;
 
-    public Career(String title, int currentLevel, double income, int energyCost, int workHours){
+    /** The sector or industry of the career. */
+    private String sector;
+
+    /** The base salary of the career. */
+    private int salary;
+
+    /** The current level of the career. */
+    private int level;
+
+    /** The accumulated experience points in the career. */
+    private int xp;
+
+    /**
+     * Constructs a default {@code Career} with:
+     * <ul>
+     *   <li>Title = "Unemployed"</li>
+     *   <li>Sector = "Unemployed"</li>
+     *   <li>Salary = 0</li>
+     *   <li>Level = 1</li>
+     *   <li>XP = 0</li>
+     * </ul>
+     */
+    public Career(){
+        title = "Unemployed";
+        sector = "Unemployed";
+        salary = 0;
+        level = 1;
+        xp = 0;
+    }
+
+    /**
+     * Constructs a {@code Career} with the specified title, sector, and salary.
+     * Level is initialized to 1 and XP to 0.
+     *
+     * @param title  the job title
+     * @param sector the career sector
+     * @param salary the base salary
+     */
+    public Career(String title, String sector, int salary) {
         this.title = title;
-        this.currentLevel = currentLevel;
-        this.income = income;
-        this.energyCost = energyCost;
-        this.workHours = workHours;
-        this.ProgressionList = new ArrayList<String>(); // this creates an empty dynamic array that stores Strings
+        this.sector = sector;
+        this.salary = salary;
+        level = 1;
+        xp = 0;
     }
 
 
-    // Getters listed below
+    /**
+     * Returns the current career level.
+     *
+     * @return the career level
+     */
+    public int getLevel()
+    {
+        return level;
+    }
 
-    public String getTitle(){
+    /**
+     * Calculates the bonus based on the career level.
+     * The bonus is a percentage of the salary equal to {@code level / 100}.
+     *
+     * @return the salary bonus
+     */
+    public double getBonus()
+    {
+        return salary * ((double) level /100);
+    }
+
+    /**
+     * Increases career XP by 20 points. If XP reaches or exceeds 100,
+     * the career level increases by 1 and XP is reset modulo 100.
+     */
+    public void earnXP()
+    {
+        xp += 20;
+        if(xp >= 100)
+        {
+            level ++;
+            xp %= 100;
+        }
+    }
+
+    /**
+     * Returns the job title of the career.
+     *
+     * @return the career title
+     */
+    public String getTitle()
+    {
         return title;
     }
-
-    public int getCurrentLevel(){
-        return currentLevel;
+    /**
+     * Returns the job sectir of the career.
+     *
+     * @return the career sector
+     */
+    public String getSector()
+    {
+        return sector;
     }
 
-    public double getIncome(){
-        return income;
+    /**
+     * Returns the base salary of the career.
+     *
+     * @return the salary
+     */
+    public int getSalary() {
+        return salary;
     }
 
-    public int getEnergyCost(){
-        return energyCost;
+    /**
+     * Sets the job title of the career.
+     *
+     * @param title the new career title
+     */
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
-    public int getWorkHours(){
-        return workHours;
+    /**
+     * Sets the sector of the career.
+     *
+     * @param sector the new career sector
+     */
+    public void setSector(String sector)
+    {
+        this.sector = sector;
     }
 
-    public List<String> getProgressionList(){
-        return ProgressionList;
+    /**
+     * Sets the base salary of the career.
+     *
+     * @param salary the new salary
+     */
+    public void setSalary(int salary)
+    {
+        this.salary = salary;
     }
-
 }

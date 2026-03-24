@@ -1,0 +1,14 @@
+Sim Name: Dave
+Sim UUID: 0
+Sim Age: 24
+Sim activityEnd: -1
+Location Name test: Living Room
+Location: Living Room
+Bank: 0.0
+Stats:
+Social: 80.0
+Hunger: sims.needs.need@27d6c5e0
+Energy: sims.needs.need@4f3f5b24
+Bladder: sims.needs.need@15aeb7ab
+Hygiene: sims.needs.need@7b23ec81
+Fun: sims.needs.need@6acbcfc0
