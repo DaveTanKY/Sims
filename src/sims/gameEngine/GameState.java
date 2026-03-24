@@ -28,10 +28,6 @@ public class GameState {
     public void startGame()
     {
         addSim(SimFactory.defaultGame());
-
-
-
-
         addLocation(new OutsideLocation("IT Office", "Title", "Developer"));
         addLocation(new OutsideLocation("Server Room", "Sector", "IT"));
         addLocation(new OutsideLocation("Studio Room", "Sector", "Media"));
@@ -116,8 +112,9 @@ public class GameState {
         System.out.println("-------------Welcome to SIMS--------------");
         System.out.println("[1] Select Character");
         System.out.println("[2] Create Character");
-        System.out.println("[3] End Game");
-        int choice = readInt("Please input option : ", 3);
+        System.out.println("[3] Save Game");
+        System.out.println("[4] End Game");
+        int choice = readInt("Please input option : ", 4);
         switch(choice) {
             case 1:
                 gameState = 1;
@@ -126,6 +123,9 @@ public class GameState {
                 gameState = 2;
                 break;
             case 3:
+                SaveGame.saveGame(currentSim, "test.txt");
+                break;
+            case 4:
                 gameState = 6;
                 break;
         }
@@ -277,8 +277,6 @@ public class GameState {
                 }
                 int simChoice = readInt("Select Sim: ", simLocList.size());
                 Sim chosenSim = simLocList.get(simChoice - 1);
-                // Example interaction logic
-
                 int optionList = 1;
                 System.out.println("[1] Talk to " + chosenSim.getName());
                 if(!currentSim.getRelationshipMap().containsKey(chosenSim.getUUID()))
@@ -301,8 +299,6 @@ public class GameState {
                         chosenSim.addRelationship(currentSim.getUUID(), newRelationship);
                         break;
                 }
-
-                // You could expand this with friendship, dialogue, or stat changes
             });
             optionIndex ++;
         }
@@ -317,7 +313,7 @@ public class GameState {
                 for (int i = 0; i < friendIds.size(); i++) {
                     Relationship rel = currentSim.getRelationshipMap().get(friendIds.get(i));
                     Sim friend = rel.getOtherSim(currentSim); // helper method to get the other Sim
-                    System.out.println("[" + (i + 1) + "] " + friend.getName());
+                    System.out.println("[" + (i + 1) + "] " + friend.getName() + " - Friendship lvl: " + rel);
                 }
                 int friendChoice = readInt("Select Friend: ", friendIds.size());
                 Relationship chosenRel = currentSim.getRelationshipMap().get(friendIds.get(friendChoice - 1));
@@ -342,13 +338,12 @@ public class GameState {
                         messageFriend.performActivity(currentSim);
                         messageFriend.performActivity(friend);
                         decayLoop(messageFriend.getDuration(), messageFriend.getImpactedNeed());
-                        chosenRel.increaseFriendship(20);
+                        chosenRel.increaseFriendship();
                         break;
                     case 2:
                         friend.getHome().moveTo(currentSim);
                         break;
                 }
-
             });
             optionIndex++;
 
@@ -385,100 +380,6 @@ public class GameState {
                 });
             }
         }
-
-
-        /*
-        if (!simLocList.isEmpty()) {
-            actions.put(optionIndex++, () -> {
-                System.out.println("\nChoose a Sim to interact with:");
-                for (int i = 0; i < simLocList.size(); i++) {
-                    System.out.println("[" + (i + 1) + "] " + simLocList.get(i).getName());
-                }
-                int simChoice = readInt("Select Sim: ", simLocList.size());
-                Sim chosenSim = simLocList.get(simChoice - 1);
-                // Example interaction logic
-
-                int optionList = 1;
-                System.out.println("[1] Talk to " + chosenSim.getName());
-                if(!currentSim.getRelationshipMap().containsKey(chosenSim.getUUID()))
-                {
-                    System.out.println("[2] Add " + chosenSim.getName() + " as friend");
-                    optionList ++;
-                }
-
-
-                int interactChoice = readInt("Select choice: ", optionList);
-                switch (interactChoice)
-                {
-                    case 1:
-                        Activity interactActivity = new Activity("Talk" , 10, "Social", 30);
-                        interactActivity.performActivity(currentSim);
-                        interactActivity.performActivity(chosenSim);
-                        decayLoop(interactActivity.getDuration(), interactActivity.getImpactedNeed());
-                        break;
-                    case 2:
-                        Relationship newRelationship = new Relationship(currentSim, chosenSim);
-                        currentSim.addRelationship(chosenSim.getUUID(), newRelationship);
-                        chosenSim.addRelationship(currentSim.getUUID(), newRelationship);
-                        break;
-                }
-
-                // You could expand this with friendship, dialogue, or stat changes
-            });
-            optionIndex++;
-        }
-
-         */
-
-
-        /*
-        // Interact with Friends
-        if (!currentSim.getRelationshipMap().isEmpty()) {
-            actions.put(optionIndex++, () -> {
-                System.out.println("\nChoose a Friend to interact with:");
-                List<Integer> friendIds = new ArrayList<>(currentSim.getRelationshipMap().keySet());
-                for (int i = 0; i < friendIds.size(); i++) {
-                    Relationship rel = currentSim.getRelationshipMap().get(friendIds.get(i));
-                    Sim friend = rel.getOtherSim(currentSim); // helper method to get the other Sim
-                    System.out.println("[" + (i + 1) + "] " + friend.getName());
-                }
-                int friendChoice = readInt("Select Friend: ", friendIds.size());
-                Relationship chosenRel = currentSim.getRelationshipMap().get(friendIds.get(friendChoice - 1));
-                Sim friend = chosenRel.getOtherSim(currentSim);
-
-
-
-                // Example: increase friendship level
-
-                int optionList = 1;
-                System.out.println("[1] Message " + friend.getName());
-                if(friend.getHome().getHomeLocation().contains(friend.getLocation()))
-                {
-                    System.out.println("[2] Visit " + friend.getHome().getName());
-                    optionList ++;
-                }
-                int friendActivity = readInt("Input : ", optionList);
-                switch (friendActivity)
-                {
-                    case 1:
-                        Activity messageFriend = new Activity("Message Friend", 10, "Social", 20);
-                        messageFriend.performActivity(currentSim);
-                        messageFriend.performActivity(friend);
-                        decayLoop(messageFriend.getDuration(), messageFriend.getImpactedNeed());
-                        chosenRel.increaseFriendship(20);
-                        break;
-                    case 2:
-                        friend.getHome().moveTo(currentSim);
-                        break;
-                }
-
-            });
-            optionIndex++;
-        }
-
-         */
-
-
         actions.put(optionIndex, () -> gameState = 0); // Exit
         // Execute choice
         int choice = readInt("\nInput : ", optionIndex);
