@@ -1,5 +1,7 @@
 package sims.career;
 
+import sims.actions.ProgressionInterface;
+
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +14,7 @@ import java.util.List;
  * <p>This class provides methods to manage career progression, calculate bonuses,
  * and update career attributes such as title, sector, and salary.</p>
  */
-public class Career{
-
-    /** The job title of the career. */
-    private String title;
+public class Career implements ProgressionInterface {
 
     /** The sector or industry of the career. */
     private String sector;
@@ -40,7 +39,6 @@ public class Career{
      * </ul>
      */
     public Career(){
-        title = "Unemployed";
         sector = "Unemployed";
         salary = 0;
         level = 1;
@@ -56,7 +54,6 @@ public class Career{
      * @param salary the base salary
      */
     public Career(String title, String sector, int salary) {
-        this.title = title;
         this.sector = sector;
         this.salary = salary;
         level = 1;
@@ -100,15 +97,6 @@ public class Career{
     }
 
     /**
-     * Returns the job title of the career.
-     *
-     * @return the career title
-     */
-    public String getTitle()
-    {
-        return title;
-    }
-    /**
      * Returns the job sectir of the career.
      *
      * @return the career sector
@@ -125,16 +113,6 @@ public class Career{
      */
     public int getSalary() {
         return salary;
-    }
-
-    /**
-     * Sets the job title of the career.
-     *
-     * @param title the new career title
-     */
-    public void setTitle(String title)
-    {
-        this.title = title;
     }
 
     /**
