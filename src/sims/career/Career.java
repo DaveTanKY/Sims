@@ -49,11 +49,10 @@ public class Career implements ProgressionInterface {
      * Constructs a {@code Career} with the specified title, sector, and salary.
      * Level is initialized to 1 and XP to 0.
      *
-     * @param title  the job title
      * @param sector the career sector
      * @param salary the base salary
      */
-    public Career(String title, String sector, int salary) {
+    public Career(String sector, int salary) {
         this.sector = sector;
         this.salary = salary;
         level = 1;
