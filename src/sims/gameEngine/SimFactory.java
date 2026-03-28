@@ -1,6 +1,7 @@
 package sims.gameEngine;
 
 import sims.actions.Activity;
+import sims.actions.SkillManager;
 import sims.career.Career;
 import sims.entity.Sim;
 import sims.needs.need;
@@ -17,11 +18,12 @@ public class SimFactory {
     public static Sim defaultGame()
     {
         Career career = new Career();
-        career.setTitle("Developer");
         career.setSector("IT");
         career.setSalary(5000);
         Home newHome = defaultHome("Dave");
-        return createSim("Dave", 0, 24, newHome,career);
+        Sim dave = createSim("Dave", 0, 24, newHome, career);
+        dave.setSkill(createSkills());
+        return dave;
     }
 
     public static Home defaultHome(String name)
@@ -103,7 +105,20 @@ public class SimFactory {
         sim.setHome(home);
         sim.setCurrentLocation(home.getHomeLocation().getFirst());
         sim.setCareer(career);
+        sim.setSkill(createSkills());
         return sim;
+    }
+
+    public static Map<String, SkillManager> createSkills()
+    {
+        HashMap<String, SkillManager> skillmap = new HashMap<>();
+        skillmap.put("Hunger", new SkillManager());
+        skillmap.put("Hygiene", new SkillManager());
+        skillmap.put("Energy", new SkillManager());
+        skillmap.put("Bladder", new SkillManager());
+        skillmap.put("Fun", new SkillManager());
+        skillmap.put("Social", new SkillManager());
+        return skillmap;
     }
 
     public static Map<String, need> createNeeds ()
