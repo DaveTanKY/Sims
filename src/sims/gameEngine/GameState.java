@@ -1,6 +1,7 @@
 package sims.gameEngine;
 
 import sims.actions.Activity;
+import sims.actions.SkillManager;
 import sims.career.Career;
 import sims.entity.Relationship;
 import sims.entity.Sim;
@@ -28,30 +29,37 @@ public class GameState {
     public void startGame()
     {
         addSim(SimFactory.defaultGame());
-        addLocation(new OutsideLocation("IT Office", "Title", "Developer"));
-        addLocation(new OutsideLocation("Server Room", "Sector", "IT"));
-        addLocation(new OutsideLocation("Studio Room", "Sector", "Media"));
 
 
-        OutsideLocation gym = new OutsideLocation("Gym", "none", "none");
+
+
+        OutsideLocation gym = new OutsideLocation("Gym", "none");
         gym.addActivity(new Activity("Workout", 30, "Fun", 40));
+        addLocation(gym);
 
-        OutsideLocation park = new OutsideLocation("Park", "none", "none");
+        OutsideLocation park = new OutsideLocation("Park","none");
         park.addActivity(new Activity("Play ball games", 90, "Fun", 60));
         park.addActivity(new Activity("Talk to friends", 60, "Social", 70));
         addLocation(park);
 
-        OutsideLocation mall = new OutsideLocation("Mall", "none", "none");
+        OutsideLocation mall = new OutsideLocation("Mall","none");
         mall.addActivity(new Activity("Eat at Restaurant", 90, "Hunger", 100, 200));
         mall.addActivity(new Activity("Arcade", 30, "Fun", 40, 50));
         mall.addActivity(new Activity("Watch Movie", 120, "Fun", 70, 100));
         addLocation(mall);
 
-        OutsideLocation work = new OutsideLocation("Office", "Title", "Developer");
+        OutsideLocation office = new OutsideLocation("IT Office", "IT");
+        OutsideLocation bank = new OutsideLocation("Bank", "Finance");
+        OutsideLocation hospital = new OutsideLocation("Hospital", "Healthcare");
+
         Activity workActivity = new Activity("Work", (8 * 60), "Salary", 0);
 
-        work.addActivity(workActivity);
-        addLocation(work);
+        hospital.addActivity(workActivity);
+        bank.addActivity(workActivity);
+        office.addActivity(workActivity);
+        addLocation(office);
+        addLocation(bank);
+        addLocation(hospital);
     }
 
     private Sim currentSim;
@@ -157,9 +165,31 @@ public class GameState {
         Career career = new Career();
         if(choice == 2)
         {
-            career.setTitle(readString("Please enter job title: "));
-            career.setSector(readString("Please enter job sector: "));
-            career.setSalary(readInt("Please enter job salary: "));
+            System.out.println("------Job Sectors-----");
+            System.out.println("[1] IT");
+            System.out.println("[2] Finance");
+            System.out.println("[3] Healthcare");
+            int jobOption = 0;
+            jobOption = readInt("Please choose job sector option: ", 3);
+
+            switch (jobOption)
+            {
+                case 1:
+                {
+                   career.setSector("IT");
+                   break;
+                }
+                case 2:
+                {
+                    career.setSector("Finance");
+                    break;
+                }
+                case 3:
+                {
+                    career.setSector("Healthcare");
+                    break;
+                }
+            }
         }
 
         System.out.println("Your Sim is being created!");
@@ -172,6 +202,7 @@ public class GameState {
 
     public void showActionMenu() {
         // Display location info
+        System.out.println(currentSim.getCareer().getSector());
         if (currentSim.getLocation() instanceof HomeLocation) {
             System.out.println("\nYour current location is " +
                     ((HomeLocation) currentSim.getLocation()).getHome().getName() +
@@ -217,29 +248,19 @@ public class GameState {
         System.out.println("\n[" + optionIndex + "] Move Location");
         actions.put(optionIndex++, () -> gameState = 4);
 
-
-/*
-        for (int i = 0; i < activityList.size(); i++) {
-            Activity activity = activityList.get(i);
-            if ("Salary".equals(activity.getImpactedNeed())) {
-                System.out.println("[" + (i + 2) + "] " + activity.getName() +
-                        " - " + activity.getImpactedNeed() + " : " +
-                        getStringTime(activity.getDuration()) + " : $" +
-                        (currentSim.getCareer().getSalary() + currentSim.getCareer().getBonus()) +
-                        " + ( Career Bonus : " + currentSim.getCareer().getLevel() + "% )");
-            } else {
-                System.out.println("[" + (i + 2) + "] " + activity.getName() +
-                        " - " + activity.getImpactedNeed() + " : " +
-                        getStringTime(activity.getDuration()) + " - " +
-                        activity.getValue() + " Stats");
-            }
-        }
-
- */
-
         for(Activity activity : activityList)
         {
-            System.out.println("[" + optionIndex + "] " + activity.getName() + " - " + activity.getImpactedNeed());
+            if(activity.getImpactedNeed() != "Salary") {
+
+
+                SkillManager skill = currentSim.getSkillMap().get(activity.getImpactedNeed());
+                System.out.println("[" + optionIndex + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " + " + activity.getValue() + " :: " + "Skill level: " + skill.getLevel() + " - Bonus stats gained: " + (skill.getLevel() * 5));
+            }
+            else
+            {
+                System.out.println("[" + optionIndex + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " + " + currentSim.getCareer().getSalary() + " :: Bonus: " + currentSim.getCareer().getBonus());
+
+            }
             int idx = optionIndex++;
             actions.put(idx, ()-> {
                 if(currentSim.getBank() >= activity.getCost()) {
@@ -313,7 +334,7 @@ public class GameState {
                 for (int i = 0; i < friendIds.size(); i++) {
                     Relationship rel = currentSim.getRelationshipMap().get(friendIds.get(i));
                     Sim friend = rel.getOtherSim(currentSim); // helper method to get the other Sim
-                    System.out.println("[" + (i + 1) + "] " + friend.getName() + " - Friendship lvl: " + rel);
+                    System.out.println("[" + (i + 1) + "] " + friend.getName() + " - Friendship lvl: " + rel.getFriendshipLevel());
                 }
                 int friendChoice = readInt("Select Friend: ", friendIds.size());
                 Relationship chosenRel = currentSim.getRelationshipMap().get(friendIds.get(friendChoice - 1));
@@ -351,6 +372,7 @@ public class GameState {
 
         System.out.println("[" + optionIndex + "] Exit to main menu");
 
+
         // Build actions map
         for (int i = 0; i < activityList.size(); i++) {
             int index = i + 2;
@@ -364,6 +386,7 @@ public class GameState {
                 }
             });
         }
+
         int upgradeStart = activityList.size() + 2;
         if (!upgradeOption.isEmpty() && currentSim.getHome() == ((HomeLocation) currentSim.getLocation()).getHome()) {
 
@@ -407,16 +430,10 @@ public class GameState {
         }
         for (OutsideLocation loc : outsideLocationList) {
             if (loc != currentSim.getLocation()) {
-                if (loc.getComparison() == "none") {
+                if (loc.getRequirement() == "none") {
                     menuList.add(loc);
-                } else if (loc.getComparison() == "Title") {
-                    if (loc.getRequirement() == currentSim.getCareer().getTitle()) {
-                        menuList.add(loc);
-                    }
-                } else if (loc.getComparison() == "Sector") {
-                    if (loc.getRequirement() == currentSim.getCareer().getSector()) {
-                        menuList.add(loc);
-                    }
+                } else if (loc.getRequirement() == currentSim.getCareer().getSector()) {
+                    menuList.add(loc);
                 }
             }
         }
