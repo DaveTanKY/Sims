@@ -31,7 +31,6 @@ public class Career implements ProgressionInterface {
     /**
      * Constructs a default {@code Career} with:
      * <ul>
-     *   <li>Title = "Unemployed"</li>
      *   <li>Sector = "Unemployed"</li>
      *   <li>Salary = 0</li>
      *   <li>Level = 1</li>
@@ -48,7 +47,6 @@ public class Career implements ProgressionInterface {
     /**
      * Constructs a {@code Career} with the specified title, sector, and salary.
      * Level is initialized to 1 and XP to 0.
-     *
      * @param sector the career sector
      * @param salary the base salary
      */
@@ -58,8 +56,6 @@ public class Career implements ProgressionInterface {
         level = 1;
         xp = 0;
     }
-
-
     /**
      * Returns the current career level.
      *
@@ -96,7 +92,7 @@ public class Career implements ProgressionInterface {
     }
 
     /**
-     * Returns the job sectir of the career.
+     * Returns the job sector of the career.
      *
      * @return the career sector
      */
