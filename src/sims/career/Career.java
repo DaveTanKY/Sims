@@ -86,6 +86,7 @@ public class Career implements ProgressionInterface {
         xp += 20;
         if(xp >= 100)
         {
+            salary += 100;
             level ++;
             xp %= 100;
         }
