@@ -9,21 +9,85 @@ import sims.world.Home;
 import sims.world.HomeLocation;
 import sims.world.HomeUpgrade;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SimFactory {
     //simfactory to create home upgrades, home location, home and sim
 
-    public static Sim defaultGame()
+    public static List<Sim> defaultGame()
     {
+        List<Sim> simList = new ArrayList<>();
+
         Career career = new Career();
         career.setSector("IT");
         career.setSalary(5000);
         Home newHome = defaultHome("Dave");
         Sim dave = createSim("Dave", 0, 24, newHome, career);
         dave.setSkill(createSkills());
-        return dave;
+        dave.setNeeds(createNeeds());
+
+        Career career1 = new Career();
+        career1.setSector("IT");
+        career1.setSalary(4000);
+        Home newHome1 = defaultHome("Tim");
+        Sim tim = createSim("Tim", 1, 23, newHome1, career1);
+        tim.setSkill(createSkills());
+        tim.setNeeds(createNeeds());
+
+        Career career2 = new Career();
+        career2.setSector("IT");
+        career2.setSalary(4500);
+        Home newHome2 = defaultHome("Darius");
+        Sim darius = createSim("Darius", 2, 25, newHome2, career2);
+        darius.setSkill(createSkills());
+        darius.setNeeds(createNeeds());
+
+        Career career3 = new Career();
+        career3.setSector("Healthcare");
+        career3.setSalary(4600);
+        Home newHome3 = defaultHome("Rance");
+        Sim rance = createSim("Rance", 3, 23, newHome3, career3);
+        rance.setSkill(createSkills());
+        rance.setNeeds(createNeeds());
+
+        Career career4 = new Career();
+        career4.setSector("Healthcare");
+        career4.setSalary(4300);
+        Home newHome4 = defaultHome("Reggie");
+        Sim reggie = createSim("Reggie", 4, 25, newHome4, career4);
+        reggie.setSkill(createSkills());
+        reggie.setNeeds(createNeeds());
+
+        Career career5 = new Career();
+        career5.setSector("Finance");
+        career5.setSalary(4200);
+        Home newHome5 = defaultHome("Eliyaz");
+        Sim eliyaz = createSim("Eliyaz", 5, 25, newHome5, career5);
+        eliyaz.setSkill(createSkills());
+        eliyaz.setNeeds(createNeeds());
+
+        Career career6 = new Career();
+        career6.setSector("Finance");
+        career6.setSalary(4700);
+        Home newHome6 = defaultHome("Thou Yong");
+        Sim thouyong = createSim("Thou Yong", 1, 25, newHome6, career6);
+        thouyong.setSkill(createSkills());
+        thouyong.setNeeds(createNeeds());
+
+
+        simList.add(dave);
+        simList.add(tim);
+        simList.add(darius);
+        simList.add(rance);
+        simList.add(reggie);
+        simList.add(eliyaz);
+        simList.add(thouyong);
+
+
+        return simList;
     }
 
     public static Home defaultHome(String name)
