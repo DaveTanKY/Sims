@@ -5,7 +5,16 @@ import sims.entity.Sim;
 
 import java.util.List;
 
-interface Location {
+
+/**
+ * Represents a location within the Sims world.
+ * <p>
+ * A {@code Location} defines the contract for places that Sims can occupy
+ * and interact with. Implementing classes should provide details about
+ * available activities, Sims present at the location, and movement logic.
+ * </p>
+ */
+public interface Location {
 
     List<Activity> getActivity();
     List<Sim> getLocSimList();
