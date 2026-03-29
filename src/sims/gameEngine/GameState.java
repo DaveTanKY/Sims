@@ -82,8 +82,7 @@ public class GameState {
     public void startGame()
     {
         //Adds default sim to game
-        addSim(SimFactory.defaultGame());
-
+        simList = SimFactory.defaultGame();
         //Creates gym default location
         OutsideLocation gym = new OutsideLocation("Gym", "none");
         gym.addActivity(new Activity("Workout", 30, "Fun", 40));
