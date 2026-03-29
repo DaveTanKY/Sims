@@ -154,6 +154,15 @@ public class GameState {
         addLocation(office);
         addLocation(bank);
         addLocation(hospital);
+
+        //moving default sims to another location.
+        gym.moveTo(simList.get(1));
+        park.moveTo(simList.get(2));
+        gym.moveTo(simList.get(3));
+        park.moveTo(simList.get(4));
+        mall.moveTo(simList.get(5));
+        mall.moveTo(simList.get(6));
+
     }
 
 
@@ -897,7 +906,7 @@ public class GameState {
     {
         String test = String.format("%02d:%02d", hours,minutes);
         System.out.println("Current Time: " + test);
-        System.out.println("Int time : " + getIntTime());
+        //System.out.println("Int time : " + getIntTime());
     }
 
 
