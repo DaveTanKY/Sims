@@ -18,42 +18,101 @@ import java.util.stream.Collectors;
 
 public class GameState {
 
+    /**
+     * Represents the current state of the game.
+     * <p>Possible values could indicate different modes such as:
+     * 0 = main menu, 1 = Choose sim menu, 2 = create sim menu, etc.</p>
+     */
     private int gameState = 0;
+
+    /**
+     * Flag indicating whether the game loop is currently running.
+     * <p>Set to {@code true} while the game is active, and {@code false} when the game should stop.</p>
+     */
     private boolean gameRunning = true;
+
+    /**
+     * Tracks the current in-game year.
+     * <p>Initialized to 2026 as the starting year of the simulation.</p>
+     */
     private int year = 2026;
+
+    /**
+     * Tracks the current in-game month.
+     * <p>Uses numeric values (1 = January, 2 = February, etc.).</p>
+     */
     private int month = 1;
+
+    /**
+     * Tracks the number of days elapsed in the current month.
+     * <p>Starts at 0 and increments as the simulation progresses.</p>
+     */
     private int days = 0;
+
+    /**
+     * Tracks the current in-game hour of the day.
+     * <p>Ranges from 0 to 23 to represent a 24-hour clock.</p>
+     */
     private int hours = 0;
+    /**
+     * Tracks the current in-game minute of the hour.
+     * <p>Ranges from 0 to 59 to represent minutes within an hour.</p>
+     */
     private int minutes = 0;
 
+    /**
+     * Initializes the simulation by adding a default Sim and several OutsideLocation
+     * instances with associated activities. This setup defines the environment in which
+     * Sims can interact, including leisure, social, and work-related activities.
+     *
+     * <p>The following locations are created:</p>
+     * <ul>
+     *   <li><b>Gym</b> – contains a "Workout" activity.</li>
+     *   <li><b>Park</b> – contains "Play ball games" and "Talk to friends" activities.</li>
+     *   <li><b>Mall</b> – contains "Eat at Restaurant", "Arcade", and "Watch Movie" activities.</li>
+     *   <li><b>IT Office</b>, <b>Bank</b>, <b>Hospital</b> – each contains a "Work" activity.</li>
+     * </ul>
+     *
+     * <p>Each activity specifies its duration, the need it fulfills (e.g., Fun, Social, Hunger, Salary),
+     * and the benefit values associated with completing it.</p>
+     *
+     * <p>This method demonstrates how to populate the repository of locations and activities
+     * so that crawler Sims can explore and engage with different environments.</p>
+     */
     public void startGame()
     {
+        //Adds default sim to game
         addSim(SimFactory.defaultGame());
 
-
-
-
+        //Creates gym default location
         OutsideLocation gym = new OutsideLocation("Gym", "none");
         gym.addActivity(new Activity("Workout", 30, "Fun", 40));
         addLocation(gym);
 
+
+        //Creates park default location
         OutsideLocation park = new OutsideLocation("Park","none");
         park.addActivity(new Activity("Play ball games", 90, "Fun", 60));
         park.addActivity(new Activity("Talk to friends", 60, "Social", 70));
         addLocation(park);
 
+
+        //Creates mall default location
         OutsideLocation mall = new OutsideLocation("Mall","none");
         mall.addActivity(new Activity("Eat at Restaurant", 90, "Hunger", 100, 200));
         mall.addActivity(new Activity("Arcade", 30, "Fun", 40, 50));
         mall.addActivity(new Activity("Watch Movie", 120, "Fun", 70, 100));
         addLocation(mall);
 
+        //Creates work locations for different sectors
         OutsideLocation office = new OutsideLocation("IT Office", "IT");
         OutsideLocation bank = new OutsideLocation("Bank", "Finance");
         OutsideLocation hospital = new OutsideLocation("Hospital", "Healthcare");
 
+        //Creates default work activity
         Activity workActivity = new Activity("Work", (8 * 60), "Salary", 0);
 
+        //Adds location to list
         hospital.addActivity(workActivity);
         bank.addActivity(workActivity);
         office.addActivity(workActivity);
@@ -62,19 +121,67 @@ public class GameState {
         addLocation(hospital);
     }
 
+
+    /**
+     * The currently active Sim in the game.
+     */
     private Sim currentSim;
+
+    /**
+     * A list containing all Sims in the game.
+     */
     private List<Sim> simList = new ArrayList<>();
+
+    /**
+     * A list containing all outside locations available in the game.
+     */
     private List<OutsideLocation> outsideLocationList = new ArrayList<>();
 
+    /**
+     * Scanner object used for user input.
+     */
     private Scanner scanner = new Scanner(System.in);
+
+
+    /**
+     * Retrieves the current state of the game.
+     * <p>
+     * The game state is represented as an integer, which can be used to
+     * indicate different phases or modes of the game
+     * </p>
+     *
+     * @return the current game state as an integer
+     */
     public int getGameState() {
         return gameState;
     }
 
+    /**
+     * Adds a new Sim to the game.
+            * <p>
+     * This method appends the provided {@link Sim} object to the list of Sims
+     * currently managed by the game. It allows new characters to be introduced
+     * into the simulation.
+     * </p>
+            *
+            * @param sim the Sim object to be added to the game
+     */
     public void addSim(Sim sim)
     {
         simList.add(sim);
     }
+
+
+    /**
+     * Adds a new outside location to the game.
+     * <p>
+     * This method appends the provided {@link OutsideLocation} object to the list
+     * of available outside locations. It allows the game world to expand by
+     * introducing new areas that Sims can interact with.
+     * </p>
+     *
+     * @param location the OutsideLocation object to be added to the game
+     */
     public void addLocation(OutsideLocation location)
     {
         outsideLocationList.add(location);
@@ -131,7 +238,6 @@ public class GameState {
                 gameState = 2;
                 break;
             case 3:
-                SaveGame.saveGame(currentSim, "test.txt");
                 break;
             case 4:
                 gameState = 6;
