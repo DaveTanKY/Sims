@@ -17,6 +17,35 @@ import java.util.Map;
 public class SimFactory {
     //simfactory to create home upgrades, home location, home and sim
 
+    /**
+     * Initializes a default game state with a predefined list of Sims.
+     * <p>
+     * This method creates several {@link Sim} objects with preset attributes,
+     * including names, ages, homes, careers, skills, and needs. Each Sim is
+     * assigned a {@link Career} sector (IT, Finance, Healthcare) with a salary,
+     * and a default home created via {@code defaultHome}. Skills and needs are
+     * initialized using helper methods {@code createSkills()} and
+     * {@code createNeeds()}.
+     * </p>
+     *
+     * <h3>Default Sims Created:</h3>
+     * <ul>
+     *   <li>Dave – IT sector, salary 5000</li>
+     *   <li>Tim – IT sector, salary 4000</li>
+     *   <li>Darius – IT sector, salary 4500</li>
+     *   <li>Rance – Healthcare sector, salary 4600</li>
+     *   <li>Reggie – Healthcare sector, salary 4300</li>
+     *   <li>Eliyaz – Finance sector, salary 4200</li>
+     *   <li>Thou Yong – Finance sector, salary 4700</li>
+     * </ul>
+     *
+     * <p>
+     * The created Sims are added to a {@link List} and returned, providing
+     * a ready-to-play starting point for the game.
+     * </p>
+     *
+     * @return a list of default Sims with predefined attributes
+     */
     public static List<Sim> defaultGame()
     {
         List<Sim> simList = new ArrayList<>();
@@ -90,6 +119,41 @@ public class SimFactory {
         return simList;
     }
 
+
+    /**
+     * Creates a default home for a Sim with predefined locations, activities, and upgrades.
+     * <p>
+     * This method initializes a {@link Home} object with a set of standard
+     * {@link HomeLocation}s (Bathroom, Living Room, Bedroom, Kitchen), each
+     * containing default activities. It also defines several {@link HomeUpgrade}s
+     * that unlock additional activities when purchased.
+     * </p>
+     *
+     * <h3>Default Activities:</h3>
+     * <ul>
+     *   <li>Kitchen – Eat Sandwich (Hunger)</li>
+     *   <li>Living Room – Watch TV (Fun), Scroll Social Media (Social)</li>
+     *   <li>Bedroom – Sleep (Energy)</li>
+     *   <li>Bathroom – Shower (Hygiene), Use Toilet (Bladder)</li>
+     * </ul>
+     *
+     * <h3>Available Upgrades:</h3>
+     * <ul>
+     *   <li>Oven (Kitchen) – Unlocks Pizza activity</li>
+     *   <li>Coffee Machine (Kitchen) – Unlocks Coffee activity</li>
+     *   <li>Sofa (Bedroom) – Unlocks Nap activity</li>
+     *   <li>Cards (Living Room) – Unlocks Play Card Games activity</li>
+     * </ul>
+     *
+     * <p>
+     * After creating activities and upgrades, they are assigned to the appropriate
+     * home locations. Finally, all locations are added to the home, which is returned
+     * for assignment to a Sim.
+     * </p>
+     *
+     * @param name the name of the Sim, used to personalize the home name
+     * @return a {@link Home} object with default locations, activities, and upgrades
+     */
     public static Home defaultHome(String name)
     {
         Home home = new Home(name + "'s Home");
@@ -162,6 +226,32 @@ public class SimFactory {
         return home;
     }
 
+    /**
+     * Creates and initializes a new Sim with the specified attributes.
+     * <p>
+     * This method constructs a {@link Sim} object with a given name, ID, and age.
+     * It then assigns the Sim a {@link Home}, sets their current location to the
+     * first available {@link HomeLocation}, and associates them with a {@link Career}.
+     * Additionally, the Sim is initialized with default needs and skills using
+     * helper methods {@code createNeeds()} and {@code createSkills()}.
+     * </p>
+     *
+     * <h3>Initialization Steps:</h3>
+     * <ul>
+     *   <li>Create a new {@link Sim} with name, ID, and age.</li>
+     *   <li>Assign default needs via {@code createNeeds()}.</li>
+     *   <li>Set the Sim’s home and current location (first location in the home).</li>
+     *   <li>Assign the specified career.</li>
+     *   <li>Initialize default skills via {@code createSkills()}.</li>
+     * </ul>
+     *
+     * @param name        the Sim’s name
+     * @param simListSize the Sim’s unique identifier or index in the Sim list
+     * @param age         the Sim’s age
+     * @param home        the Sim’s home environment
+     * @param career      the Sim’s career assignment
+     * @return a fully initialized {@link Sim} object
+     */
     public static Sim createSim (String name, int simListSize, int age, Home home, Career career)
     {
         Sim sim = new Sim(name, simListSize, age);
@@ -173,6 +263,33 @@ public class SimFactory {
         return sim;
     }
 
+    /**
+     * Creates and initializes a default skill map for a Sim.
+     * <p>
+     * This method constructs a {@link HashMap} where each key represents
+     * a specific need category (e.g., Hunger, Hygiene, Energy, Bladder, Fun, Social),
+     * and each value is a new {@link SkillManager} instance responsible for
+     * tracking and managing the Sim's skill progression in that category.
+     * </p>
+     *
+     * <h3>Default Skills Created:</h3>
+     * <ul>
+     *   <li>Hunger</li>
+     *   <li>Hygiene</li>
+     *   <li>Energy</li>
+     *   <li>Bladder</li>
+     *   <li>Fun</li>
+     *   <li>Social</li>
+     * </ul>
+     *
+     * <p>
+     * The returned map provides a consistent baseline skill set for each Sim,
+     * ensuring that all primary needs are represented and can be managed
+     * throughout gameplay.
+     * </p>
+     *
+     * @return a map of need categories to their corresponding {@link SkillManager} objects
+     */
     public static Map<String, SkillManager> createSkills()
     {
         HashMap<String, SkillManager> skillmap = new HashMap<>();
@@ -185,6 +302,35 @@ public class SimFactory {
         return skillmap;
     }
 
+
+    /**
+     * Creates and initializes a default needs map for a Sim.
+     * <p>
+     * This method constructs a {@link HashMap} where each key represents
+     * a specific need category (e.g., Hunger, Hygiene, Energy, Bladder, Fun, Social),
+     * and each value is a new {@link need} object initialized with a decay rate.
+     * The decay rate determines how quickly the need decreases over time in the
+     * simulation, requiring the Sim to perform activities to replenish it.
+     * </p>
+     *
+     * <h3>Default Needs and Decay Rates:</h3>
+     * <ul>
+     *   <li>Hunger – 0.2</li>
+     *   <li>Hygiene – 0.01</li>
+     *   <li>Energy – 0.3</li>
+     *   <li>Bladder – 0.02</li>
+     *   <li>Fun – 0.005</li>
+     *   <li>Social – 0.003</li>
+     * </ul>
+     *
+     * <p>
+     * The returned map provides a consistent baseline set of needs for each Sim,
+     * ensuring that all primary aspects of well-being are represented and can be
+     * managed throughout gameplay.
+     * </p>
+     *
+     * @return a map of need categories to their corresponding {@link need} objects
+     */
     public static Map<String, need> createNeeds ()
     {
         HashMap<String, need> needDict = new HashMap<>();
