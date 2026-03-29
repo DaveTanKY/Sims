@@ -186,15 +186,60 @@ public class GameState {
     {
         outsideLocationList.add(location);
     }
+
+    /**
+     * Checks whether the game is currently running.
+     * <p>
+     * This method returns the value of the {@code gameRunning} flag,
+     * which indicates if the simulation is active. It can be used to
+     * determine whether the game loop should continue executing or
+     * if the game has been stopped/paused.
+     * </p>
+     *
+     * @return {@code true} if the game is running, {@code false} otherwise
+     */
     public boolean getGameRunning()
     {
         return gameRunning;
     }
+
+
+    /**
+     * Updates the current state of the game.
+     * <p>
+     * This method sets the {@code gameState} field to the specified value.
+     * The state can be used to represent different phases or modes of the game
+     * </p>
+     *
+     * @param state the new game state to be applied
+     */
     public void setGameState(int state)
     {
         gameState = state;
     }
 
+    /**
+     * Updates the game flow based on the current state.
+     * <p>
+     * This method uses the {@code gameState} value to determine which
+     * menu or action should be displayed or executed. Each state corresponds
+     * to a different phase of the game:
+     * </p>
+     * <ul>
+     *   <li>0 – Show the main menu</li>
+     *   <li>1 – Show the choose Sim menu</li>
+     *   <li>2 – Show the create Sim menu</li>
+     *   <li>3 – Show the action menu</li>
+     *   <li>4 – Show the move menu</li>
+     *   <li>5 – Reserved/unused state</li>
+     *   <li>6 – End the game</li>
+     * </ul>
+     * <p>
+     * Implementing this switch-case structure ensures that the game responds
+     * appropriately to user input and transitions smoothly between different
+     * stages.
+     * </p>
+     */
     public void update() {
         switch(gameState)
         {
@@ -221,15 +266,34 @@ public class GameState {
         }
     }
 
+
+    /**
+     * Displays the main menu of the game and handles user input.
+     * <p>
+     * This method prints the main menu options to the console, allowing the player
+     * to select actions such as choosing a character, creating a new character,
+     * saving the game, or ending the game. Based on the player's choice, the
+     * {@code gameState} is updated accordingly:
+     * </p>
+     * <ul>
+     *   <li>1 – Select Character (transition to choose Sim menu)</li>
+     *   <li>2 – Create Character (transition to create Sim menu)</li>
+     *   <li>3 – Save Game (transition to end game state)</li>
+     *   <li>4 – End Game (not yet implemented in this snippet)</li>
+     * </ul>
+     * <p>
+     * The method uses {@code readInt} to validate user input and ensure the choice
+     * falls within the available options.
+     * </p>
+     */
     public void showMainMenu()
     {
         System.out.println("This is the main menu");
         System.out.println("-------------Welcome to SIMS--------------");
         System.out.println("[1] Select Character");
         System.out.println("[2] Create Character");
-        System.out.println("[3] Save Game");
-        System.out.println("[4] End Game");
-        int choice = readInt("Please input option : ", 4);
+        System.out.println("[3] End Game");
+        int choice = readInt("Please input option: ", 3);
         switch(choice) {
             case 1:
                 gameState = 1;
@@ -238,13 +302,31 @@ public class GameState {
                 gameState = 2;
                 break;
             case 3:
-                break;
-            case 4:
                 gameState = 6;
                 break;
         }
     }
 
+    /**
+     * Displays the character selection menu and allows the player to choose a Sim.
+     * <p>
+     * This method prints a list of all available Sims from {@code simList},
+     * prompting the player to select one. The chosen Sim becomes the
+     * {@code currentSim}, and the {@code gameState} is updated to 3
+     * (action menu). After updating the state, the {@code update()} method
+     * is called to continue the game flow.
+     * </p>
+     * <p>
+     * Menu flow:
+     * <ul>
+     *   <li>Displays all Sims with their names and corresponding index numbers.</li>
+     *   <li>Prompts the player for input using {@code readInt}, ensuring the choice
+     *       is within the valid range.</li>
+     *   <li>Sets {@code currentSim} to the selected Sim.</li>
+     *   <li>Transitions the game to the action menu (state 3).</li>
+     * </ul>
+     * </p>
+     */
     public void showChooseSimMenu()
     {
         System.out.println("-------------Character Select--------------");
@@ -261,13 +343,30 @@ public class GameState {
         update();
     }
 
+    /**
+     * Displays the Sim creation menu and allows the player to create a new Sim.
+     * <p>
+     * This method guides the player through the process of creating a Sim by:
+     * </p>
+     * <ul>
+     *   <li>Prompting for the Sim's name and age.</li>
+     *   <li>Allowing the player to choose whether the Sim has a job.</li>
+     *   <li>If a job is selected, prompting for a job sector (IT, Finance, Healthcare).</li>
+     *   <li>Assigning the chosen career sector to the new {@link Career} object.</li>
+     * </ul>
+     * <p>
+     * The method uses {@code readString} and {@code readInt} to validate user input
+     * and ensure correct values are provided. Once complete, the new Sim can be
+     * added to the game world with the specified attributes.
+     * </p>
+     */
     public void showCreateMenu() {
         System.out.println("-------------SIM Creation--------------");
         String name = readString("Please enter name of Sim: ");
         int age = readInt("Please enter age of Sim: ");
         System.out.println("[1] Sim does not have a job");
         System.out.println("[2] Sim has a job");
-        int choice = readInt("Please enter choice accordingly: ");
+        int choice = readInt("Please input option: ");
         Career career = new Career();
         if(choice == 2)
         {
@@ -296,19 +395,55 @@ public class GameState {
                     break;
                 }
             }
+            career.setSalary(readInt("Input initial Salary: "));
         }
 
         System.out.println("Your Sim is being created!");
         Home newHome = SimFactory.defaultHome(name);
+
         Sim newSim = SimFactory.createSim(name, simList.size(), age, newHome, career);
         simList.add(newSim);
         currentSim = newSim;
         gameState = 3;
     }
 
+    /**
+     * Displays the action menu for the currently selected Sim and handles player input.
+     * <p>
+     * This method provides the player with a variety of options depending on the Sim's
+     * current location, available activities, upgrades, and relationships. It dynamically
+     * builds a menu of actions and executes the chosen option.
+     * </p>
+     *
+     * <h3>Features:</h3>
+     * <ul>
+     *   <li>Displays the Sim's current location.</li>
+     *   <li>Shows the current time and Sim statistics.</li>
+     *   <li>Lists other Sims present in the same location.</li>
+     *   <li>Builds a list of available activities from the location and unlocked upgrades.</li>
+     *   <li>Allows the player to purchase home upgrades to unlock new activities.</li>
+     *   <li>Provides interaction options with other Sims (talk, add friend).</li>
+     *   <li>Provides interaction options with existing friends (message, visit).</li>
+     *   <li>Allows the player to move to a different location.</li>
+     *   <li>Allows the player to exit back to the main menu.</li>
+     * </ul>
+     *
+     * <h3>Game State Transitions:</h3>
+     * <ul>
+     *   <li>Move Location → {@code gameState = 4}</li>
+     *   <li>Exit to Main Menu → {@code gameState = 0}</li>
+     *   <li>Other actions may trigger activities, relationship changes, or upgrades.</li>
+     * </ul>
+     *
+     * <p>
+     * The method uses a {@link Map} of menu options to {@link Runnable} actions,
+     * ensuring that each choice executes the correct behavior. Input validation
+     * is handled via {@code readInt}, and insufficient funds are checked before
+     * performing activities or purchasing upgrades.
+     * </p>
+     */
     public void showActionMenu() {
         // Display location info
-        System.out.println(currentSim.getCareer().getSector());
         if (currentSim.getLocation() instanceof HomeLocation) {
             System.out.println("\nYour current location is " +
                     ((HomeLocation) currentSim.getLocation()).getHome().getName() +
@@ -346,7 +481,6 @@ public class GameState {
             }
         }
 
-        // Print menu
         System.out.println("\n-------------Please choose action for SIM--------------");
 
         Map<Integer, Runnable> actions = new HashMap<>();
@@ -360,12 +494,12 @@ public class GameState {
 
 
                 SkillManager skill = currentSim.getSkillMap().get(activity.getImpactedNeed());
-                System.out.println("[" + optionIndex + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " + " + activity.getValue() + " :: " + "Skill level: " + skill.getLevel() + " - Bonus stats gained: " + (skill.getLevel() * 5));
+                System.out.println("[" + optionIndex + "] " + activity.getName() + " ("+ getStringTime(activity.getDuration()) + ") : " + activity.getImpactedNeed() + " + " + activity.getValue() + " (Skill level: " + skill.getLevel() + " - Bonus stats gained: " + (skill.getLevel() * 5)+ ")");
             }
             else
             {
-                System.out.println("[" + optionIndex + "] " + activity.getName() + " - " + activity.getImpactedNeed() + " + " + currentSim.getCareer().getSalary() + " :: Bonus: " + currentSim.getCareer().getBonus());
-
+                Career career = currentSim.getCareer();
+                System.out.println("[" + optionIndex + "] " + activity.getName() + " (" + getStringTime(activity.getDuration()) + ") : Earn $" + currentSim.getCareer().getSalary() + " + (Career Level: " + currentSim.getCareer().getLevel() + " -  Bonus: $" + currentSim.getCareer().getBonus() + ")");
             }
             int idx = optionIndex++;
             actions.put(idx, ()-> {
@@ -517,7 +651,31 @@ public class GameState {
 
 
 
-
+    /**
+     * Displays the location movement menu and allows the player to move the current Sim.
+     * <p>
+     * This method builds a list of possible destinations based on the Sim's current
+     * location and career requirements:
+     * </p>
+     * <ul>
+     *   <li>If the Sim is in a {@link HomeLocation}, all other rooms in the home are listed.</li>
+     *   <liIf the Sim is outside, their home is added as a destination.</li>
+     *   <li>{@link OutsideLocation}s are added if they either have no requirement
+     *       or match the Sim's career sector.</li>
+     * </ul>
+     *
+     * <p>
+     * The menu is printed with numbered options, and the player selects a destination
+     * using {@code readInt}. The chosen location’s {@code moveTo} method is then called
+     * to move the Sim. After moving, the {@code gameState} is set to 3 (action menu),
+     * and {@code update()} is invoked to continue the game flow.
+     * </p>
+     *
+     * <h3>Game State Transition:</h3>
+     * <ul>
+     *   <li>After moving → {@code gameState = 3} (Action Menu)</li>
+     * </ul>
+     */
     public void showMoveMenu()
     {
         List<Loc> menuList = new ArrayList<>();
@@ -556,6 +714,25 @@ public class GameState {
     }
 
 
+    /**
+     * Reads an integer value from user input with validation.
+     * <p>
+     * This method displays the given prompt and waits for the user to enter
+     * an integer. Input is validated to ensure that:
+     * </p>
+     * <ul>
+     *   <li>The entered value is an integer (non-numeric input is rejected).</li>
+     *   <li>The value is greater than zero (non-positive values are rejected).</li>
+     * </ul>
+     * <p>
+     * If invalid input is detected, the user is prompted again until a valid
+     * integer is entered. The method uses a {@code Scanner} instance to read
+     * input from the console.
+     * </p>
+     *
+     * @param prompt the message displayed to the user before input
+     * @return a positive integer entered by the user
+     */
     public int readInt(String prompt)
     {
         System.out.println(prompt);
@@ -577,6 +754,27 @@ public class GameState {
         }
     }
 
+    /**
+     * Reads an integer value from user input with validation against a range of options.
+     * <p>
+     * This method displays the given prompt and waits for the user to enter
+     * an integer. Input is validated to ensure that:
+     * </p>
+     * <ul>
+     *   <li>The entered value is an integer (non-numeric input is rejected).</li>
+     *   <li>The value is greater than zero.</li>
+     *   <li>The value does not exceed the specified number of options.</li>
+     * </ul>
+     * <p>
+     * If invalid input is detected, the user is prompted again until a valid
+     * integer is entered. The method uses a {@code Scanner} instance to read
+     * input from the console.
+     * </p>
+     *
+     * @param prompt  the message displayed to the user before input
+     * @param options the maximum valid option number (upper bound of the range)
+     * @return a positive integer between 1 and {@code options}, inclusive
+     */
     public int readInt(String prompt, int options)
     {
         System.out.println(prompt);
@@ -599,11 +797,44 @@ public class GameState {
         }
     }
 
+    /**
+     * Reads a string value from user input.
+     * <p>
+     * This method displays the given prompt and waits for the user to enter
+     * a line of text. The input is read using a {@code Scanner} instance
+     * and returned as a {@code String}.
+     * </p>
+     *
+     * @param prompt the message displayed to the user before input
+     * @return the string entered by the user
+     */
     public String readString(String prompt) {
         System.out.println(prompt);
         return scanner.nextLine();
     }
 
+    /**
+     * Displays the current statistics of the specified Sim.
+     * <p>
+     * This method prints the Sim's name followed by each of their needs
+     * and the corresponding values. The values are formatted to two decimal
+     * places and shown as a fraction of 100, representing the Sim's status
+     * in different areas (e.g., hunger, energy, social).
+     * </p>
+     *
+     * <h3>Output Example:</h3>
+     * <pre>
+     * Alice's Stats
+     * Social : 75.50/100
+     * Hunger : 60.25/100
+     * Energy : 90.00/100
+     * Bladder : 80.00/100
+     * Hygiene : 50.00/100
+     * Fun : 95.00/100
+     * </pre>
+     *
+     * @param sim the Sim whose statistics are to be displayed
+     */
     public void showStats(Sim sim)
     {
         System.out.println(sim.getName() + "'s Stats");
@@ -612,6 +843,21 @@ public class GameState {
         }
     }
 
+    /**
+     * Displays the current in-game time.
+     * <p>
+     * This method formats the {@code hours} and {@code minutes} fields into
+     * a standard 24-hour clock format (HH:mm) and prints it to the console.
+     * It also prints the integer representation of the time by calling
+     * {@code getIntTime()}, which can be useful for calculations or comparisons.
+     * </p>
+     *
+     * <h3>Output Example:</h3>
+     * <pre>
+     * Current Time: 09:05
+     * Int time : 905
+     * </pre>
+     */
     public void showTime()
     {
         String test = String.format("%02d:%02d", hours,minutes);
@@ -620,6 +866,28 @@ public class GameState {
     }
 
 
+    /**
+     * Runs the decay loop for all Sims over a specified duration.
+     * <p>
+     * This method simulates the passage of time in the game by repeatedly
+     * updating the in-game clock and applying need decay to each Sim.
+     * The decay is applied to the specified need type for all Sims in
+     * {@code simList}, using the current Sim and the integer time value
+     * as context.
+     * </p>
+     *
+     * <h3>Behavior:</h3>
+     * <ul>
+     *   <li>For each unit of {@code duration}, the in-game time is updated.</li>
+     *   <li>Each Sim in {@code simList} has {@code performDecay} called
+     *       for the given need.</li>
+     *   <li>The {@code getIntTime()} method is used to provide the current
+     *       time in integer format to the decay logic.</li>
+     * </ul>
+     *
+     * @param duration the number of time units to simulate
+     * @param need     the type of need to decay (e.g., Hunger, Energy, Social)
+     */
     public void decayLoop (int duration, String need)
     {
             for (int i = 0; i < duration; i++) {
@@ -628,14 +896,54 @@ public class GameState {
                     sim.performDecay(need, currentSim, getIntTime());
                 }
             }
-
     }
 
+    /**
+     * Returns the current in-game time as an integer value.
+     * <p>
+     * The time is calculated by converting the {@code hours} and {@code minutes}
+     * fields into total minutes since midnight:
+     * </p>
+     *
+     * <pre>
+     * intTime = (hours * 60) + minutes
+     * </pre>
+     *
+     * <p>
+     * This integer representation of time is useful for calculations,
+     * comparisons, and passing into methods that require a numeric time format
+     * (e.g., decay loops or activity scheduling).
+     * </p>
+     *
+     * @return the current time in minutes since midnight
+     */
     public int getIntTime()
     {
             return (hours * 60) + (minutes);
     }
 
+    /**
+     * Converts a time value in minutes into a formatted string.
+     * <p>
+     * This method takes a total number of minutes and converts it into
+     * hours and days where applicable:
+     * </p>
+     * <ul>
+     *   <li>If the value is less than 60, it is displayed as minutes only.</li>
+     *   <li>If the value is 60 or more, it is converted into hours and minutes.</li>
+     *   <li>If the value exceeds 24 hours, it is converted into days, hours, and minutes.</li>
+     * </ul>
+     *
+     * <h3>Output Examples:</h3>
+     * <pre>
+     * getStringTime(45)   → "45 Minutes"
+     * getStringTime(125)  → "02 Hours : 05 Minutes"
+     * getStringTime(1500) → "01 Day : 01 Hours : 00 Minutes"
+     * </pre>
+     *
+     * @param minutes the total time in minutes
+     * @return a formatted string representing the time in days, hours, and minutes
+     */
     public String getStringTime(int minutes)
     {
         int hour;
@@ -654,6 +962,32 @@ public class GameState {
         }
         return String.format("%02d Minutes", minutes);
     }
+
+    /**
+     * Updates the in-game clock by advancing time.
+     * <p>
+     * This method increments the {@code minutes} field and carries over values
+     * into higher units of time as needed:
+     * </p>
+     * <ul>
+     *   <li>Minutes → Hours (every 60 minutes)</li>
+     *   <li>Hours → Days (every 24 hours)</li>
+     *   <li>Days → Months (every 31 days, simplified assumption)</li>
+     *   <li>Months → Years (every 12 months)</li>
+     * </ul>
+     *
+     * <p>
+     * The rollover logic ensures that the in-game time remains consistent and
+     * progresses naturally. For simplicity, months are assumed to have 31 days.
+     * </p>
+     *
+     * <h3>Example:</h3>
+     * <pre>
+     * Initial: 23 hours, 59 minutes
+     * After updateTime():
+     *   → 0 hours, 0 minutes, +1 day
+     * </pre>
+     */
     public void updateTime()
     {
 
@@ -676,6 +1010,20 @@ public class GameState {
         month = (month % 12 == 0) ? 12 : month % 12;
     }
 
+    /**
+     * Ends the game by stopping the main loop.
+     * <p>
+     * This method sets the {@code gameRunning} flag to {@code false},
+     * which signals the game engine to terminate execution. Once called,
+     * the game will no longer continue updating or processing menus.
+     * </p>
+     *
+     * <h3>Usage:</h3>
+     * <ul>
+     *   <li>Typically invoked when the player selects "End Game" from the main menu.</li>
+     *   <li>Ensures a clean exit from the game loop without abrupt termination.</li>
+     * </ul>
+     */
     public void endGame()
     {
         gameRunning = false;
