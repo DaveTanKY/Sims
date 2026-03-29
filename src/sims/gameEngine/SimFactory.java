@@ -14,6 +14,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A utility factory class for creating and initializing Sims and their environments.
+ * <p>
+ * This class provides static methods to bootstrap the game world with default Sims,
+ * homes, skills, and needs. It ensures that each Sim is consistently initialized
+ * with a home, career, skill set, and needs, making it easier to start a new game
+ * or generate test scenarios.
+ * </p>
+ *
+ * <h3>Responsibilities:</h3>
+ * <ul>
+ *   <li>{@link #defaultGame()} – Creates a predefined list of Sims with careers, homes, skills, and needs.</li>
+ *   <li>{@link #defaultHome(String)} – Builds a personalized home with default locations, activities, and upgrades.</li>
+ *   <li>{@link #createSim(String, int, int, Home, Career)} – Constructs a fully initialized Sim with the given attributes.</li>
+ *   <li>{@link #createSkills()} – Generates a baseline skill map for Sims, covering all primary need categories.</li>
+ *   <li>{@link #createNeeds()} – Generates a baseline needs map for Sims, with decay rates for each need type.</li>
+ * </ul>
+
+ *
+ * <p>
+ * By centralizing Sim creation logic, this class promotes consistency and reduces
+ * duplication across the game engine. It acts as the entry point for setting up
+ * new Sims and their environments.
+ * </p>
+ */
 public class SimFactory {
     //simfactory to create home upgrades, home location, home and sim
 

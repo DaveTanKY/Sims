@@ -16,6 +16,42 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the overall state of the game simulation.
+ * <p>
+ * The {@code GameState} class acts as the central container for all
+ * active game entities, including Sims, homes, careers, and locations.
+ * It provides a snapshot of the current simulation, allowing the game
+ * engine to track, update, and persist progress across sessions.
+ * </p>
+ *
+ * <h3>Responsibilities:</h3>
+ * <ul>
+ *   <li>Maintain a list of all active {@link Sim} objects in the game.</li>
+ *   <li>Track homes, locations, and activities associated with Sims.</li>
+ *   <li>Store global simulation data such as time, resources, and upgrades.</li>
+ *   <li>Provide methods for querying and updating the current state.</li>
+ *   <li>Serve as the entry point for saving and loading game progress.</li>
+ * </ul>
+ *
+ * <h3>Usage Example:</h3>
+ * <pre>
+ * GameState gameState = new GameState();
+ * List<Sim> sims = SimFactory.defaultGame();
+ * gameState.setSimList(sims);
+ *
+ * // Query current Sims
+ * for (Sim sim : gameState.getSimList()) {
+ *     System.out.println(sim.getName() + " is part of the game.");
+ * }
+ * </pre>
+ *
+ * <p>
+ * By centralizing all simulation data, {@code GameState} ensures consistency
+ * across gameplay mechanics and provides a single source of truth for the
+ * current game world.
+ * </p>
+ */
 public class GameState {
 
     /**
