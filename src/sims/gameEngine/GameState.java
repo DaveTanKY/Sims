@@ -303,8 +303,6 @@ public class GameState {
                 showMoveMenu();
                 break;
             case 5:
-                break;
-            case 6:
                 endGame();
                 break;
         }
@@ -346,7 +344,7 @@ public class GameState {
                 gameState = 2;
                 break;
             case 3:
-                gameState = 6;
+                gameState = 5;
                 break;
         }
     }
