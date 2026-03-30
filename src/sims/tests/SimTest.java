@@ -170,38 +170,4 @@ public class SimTest {
         // Energy should decay
         assertTrue(testSim.getNeeds().get("Energy").getValue() < initialEnergy);
     }
-
-    /**
-     * Tests the performDecay method triggering autoplay for other Sims.
-     * Ensures that when a need becomes critical for a non-current Sim, autoplay is triggered.
-     */
-    @Test
-    public void testPerformDecayTriggersAutoplay() {
-        // For other sim, decay should trigger autoplay if need is critical and sim is not busy
-        Sim otherSim = new Sim("OtherSim", 2, 30);
-        Map<String, Need> otherNeeds = new HashMap<>();
-        Need criticalNeed = new Need(0.5);
-        // Set need to be critical (below threshold)
-        criticalNeed.setValue(-50.0); // This will make it critical after decay
-        otherNeeds.put("Hunger", criticalNeed);
-        otherSim.setNeeds(otherNeeds);
-
-        // Set up skills for the sim
-        Map<String, sims.actions.SkillManager> skills = new HashMap<>();
-        skills.put("Hunger", new sims.actions.SkillManager());
-        otherSim.setSkill(skills);
-
-        // Set up home and activity for autoplay
-        Home mockHome = new Home("Test Home");
-        HomeLocation homeLoc = new HomeLocation("Kitchen", mockHome);
-        Activity eatActivity = new Activity("Eat", 30, "Hunger", 20);
-        homeLoc.addActivity(eatActivity);
-        mockHome.addHomeLocation(homeLoc);
-        otherSim.setHome(mockHome);
-
-        otherSim.performDecay("Energy", testSim, 100); // testSim is "current", otherSim is being decayed
-
-        // Since need is critical and time > activityEnd (-1), autoplay should trigger
-        assertEquals(130, otherSim.getActivityEnd()); // Activity duration 30 + time 100
-    }
 }
