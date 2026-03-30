@@ -9,7 +9,7 @@ package sims.needs;
  * <p>This class provides methods to adjust the need's value, apply decay over time,
  * and check whether the need has fallen below its threshold.</p>
  */
-public class need {
+public class Need {
     /** The current value of the need (0–100). */
     private double value;
 
@@ -27,7 +27,7 @@ public class need {
      *   <li>Threshold = 30</li>
      * </ul>
      */
-    public need()
+    public Need()
     {
         this.value = 80;
         this.decayRate = 0.5;
@@ -40,7 +40,7 @@ public class need {
      *
      * @param rate the decay rate
      */
-    public need(double rate)
+    public Need(double rate)
     {
         value = 80;
         decayRate = rate;
@@ -54,7 +54,7 @@ public class need {
      * @param decayRate  the rate at which the need decays
      * @param threshold  the threshold below which the need is critical
      */
-    public need(int value, double decayRate, double threshold)
+    public Need(int value, double decayRate, double threshold)
     {
         this.value = value;
         this.decayRate = decayRate;

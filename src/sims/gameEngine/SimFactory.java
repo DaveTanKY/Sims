@@ -4,7 +4,7 @@ import sims.actions.Activity;
 import sims.actions.SkillManager;
 import sims.career.Career;
 import sims.entity.Sim;
-import sims.needs.need;
+import sims.needs.Need;
 import sims.world.Home;
 import sims.world.HomeLocation;
 import sims.world.HomeUpgrade;
@@ -330,7 +330,7 @@ public class SimFactory {
      * <p>
      * This method constructs a {@link HashMap} where each key represents
      * a specific need category (e.g., Hunger, Hygiene, Energy, Bladder, Fun, Social),
-     * and each value is a new {@link need} object initialized with a decay rate.
+     * and each value is a new {@link Need} object initialized with a decay rate.
      * The decay rate determines how quickly the need decreases over time in the
      * simulation, requiring the Sim to perform activities to replenish it.
      * </p>
@@ -351,18 +351,18 @@ public class SimFactory {
      * managed throughout gameplay.
      * </p>
      *
-     * @return a map of need categories to their corresponding {@link need} objects
+     * @return a map of need categories to their corresponding {@link Need} objects
      */
-    public static Map<String, need> createNeeds ()
+    public static Map<String, Need> createNeeds ()
     {
         Random rand = new Random();
-        HashMap<String, need> needDict = new HashMap<>();
-        needDict.put("Hunger", new need(rand.nextInt(51) + 50,0.2, 30));
-        needDict.put("Hygiene", new need(rand.nextInt(51) + 50, 0.01, 30));
-        needDict.put("Energy", new need(rand.nextInt(51) + 50,0.3, 30));
-        needDict.put("Bladder", new need(rand.nextInt(51) + 50,0.02, 30));
-        needDict.put("Fun", new need(rand.nextInt(51) + 50,0.005, 30));
-        needDict.put("Social", new need(rand.nextInt(51) + 50,0.003, 30));
+        HashMap<String, Need> needDict = new HashMap<>();
+        needDict.put("Hunger", new Need(rand.nextInt(51) + 50,0.2, 30));
+        needDict.put("Hygiene", new Need(rand.nextInt(51) + 50, 0.01, 30));
+        needDict.put("Energy", new Need(rand.nextInt(51) + 50,0.3, 30));
+        needDict.put("Bladder", new Need(rand.nextInt(51) + 50,0.02, 30));
+        needDict.put("Fun", new Need(rand.nextInt(51) + 50,0.005, 30));
+        needDict.put("Social", new Need(rand.nextInt(51) + 50,0.003, 30));
         return needDict;
     }
 }

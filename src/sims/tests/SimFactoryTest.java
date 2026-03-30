@@ -5,7 +5,7 @@ import sims.actions.SkillManager;
 import sims.career.Career;
 import sims.entity.Sim;
 import sims.gameEngine.SimFactory;
-import sims.needs.need;
+import sims.needs.Need;
 import sims.world.Home;
 import sims.world.HomeLocation;
 import sims.world.HomeUpgrade;
@@ -223,7 +223,7 @@ public class SimFactoryTest {
      */
     @Test
     public void testCreateNeeds() {
-        Map<String, need> needs = SimFactory.createNeeds();
+        Map<String, Need> needs = SimFactory.createNeeds();
         assertEquals(6, needs.size());
         assertTrue(needs.containsKey("Hunger"));
         assertTrue(needs.containsKey("Hygiene"));
@@ -241,7 +241,7 @@ public class SimFactoryTest {
         assertEquals(0.003, needs.get("Social").getDecayRate(), 0.001);
 
         // Check values are between 50 and 100
-        for (need n : needs.values()) {
+        for (Need n : needs.values()) {
             assertTrue(n.getValue() >= 50 && n.getValue() <= 100);
         }
     }

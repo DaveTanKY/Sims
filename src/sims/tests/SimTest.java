@@ -3,7 +3,7 @@ package sims.tests;
 import sims.entity.Sim;
 import sims.gameEngine.SimFactory;
 import sims.career.Career;
-import sims.needs.need;
+import sims.needs.Need;
 import sims.world.Home;
 import sims.world.HomeLocation;
 import sims.actions.Activity;
@@ -179,8 +179,8 @@ public class SimTest {
     public void testPerformDecayTriggersAutoplay() {
         // For other sim, decay should trigger autoplay if need is critical and sim is not busy
         Sim otherSim = new Sim("OtherSim", 2, 30);
-        Map<String, need> otherNeeds = new HashMap<>();
-        need criticalNeed = new need(0.5);
+        Map<String, Need> otherNeeds = new HashMap<>();
+        Need criticalNeed = new Need(0.5);
         // Set need to be critical (below threshold)
         criticalNeed.setValue(-50.0); // This will make it critical after decay
         otherNeeds.put("Hunger", criticalNeed);

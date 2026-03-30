@@ -5,7 +5,7 @@ import sims.actions.SkillManager;
 import sims.career.Career;
 import sims.entity.Relationship;
 import sims.entity.Sim;
-import sims.needs.need;
+import sims.needs.Need;
 import sims.world.*;
 
 import java.util.HashMap;
@@ -880,7 +880,7 @@ public class GameState {
     public void showStats(Sim sim)
     {
         System.out.println(sim.getName() + "'s Stats");
-        for (Map.Entry<String, need> entry : sim.getNeeds().entrySet()) {
+        for (Map.Entry<String, Need> entry : sim.getNeeds().entrySet()) {
             System.out.println(entry.getKey() + " : " + (String.format("%.2f", entry.getValue().getValue())) + "/100");
         }
     }

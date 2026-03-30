@@ -1,21 +1,21 @@
 package sims.tests;
 
-import sims.needs.need;
+import sims.needs.Need;
 import org.junit.Test;
 import org.junit.Before;
 import static org.junit.Assert.*;
 
 public class NeedTest {
 
-    private need defaultNeed;
-    private need customDecayNeed;
-    private need fullCustomNeed;
+    private Need defaultNeed;
+    private Need customDecayNeed;
+    private Need fullCustomNeed;
 
     @Before
     public void setUp() {
-        defaultNeed = new need();
-        customDecayNeed = new need(0.3);
-        fullCustomNeed = new need(50, 1, 20.0);
+        defaultNeed = new Need();
+        customDecayNeed = new Need(0.3);
+        fullCustomNeed = new Need(50, 1, 20.0);
     }
 
     /**
@@ -106,7 +106,7 @@ public class NeedTest {
      */
     @Test
     public void testSetValueClampToMin() {
-        need lowNeed = new need(10, 1, 20.0);
+        Need lowNeed = new Need(10, 1, 20.0);
         lowNeed.setValue(-15.0); // 10 - 15 = -5, should clamp to 0
         assertEquals(0.0, lowNeed.getValue(), 0.001);
     }
@@ -117,7 +117,7 @@ public class NeedTest {
      */
     @Test
     public void testSetValueExactMax() {
-        need ninetyNeed = new need(90, 1, 20.0);
+        Need ninetyNeed = new Need(90, 1, 20.0);
         ninetyNeed.setValue(10.0); // 90 + 10 = 100, should be exactly 100
         assertEquals(100.0, ninetyNeed.getValue(), 0.001);
     }
@@ -128,7 +128,7 @@ public class NeedTest {
      */
     @Test
     public void testSetValueExactMin() {
-        need tenNeed = new need(10, 1, 20.0);
+        Need tenNeed = new Need(10, 1, 20.0);
         tenNeed.setValue(-10.0); // 10 - 10 = 0, should be exactly 0
         assertEquals(0.0, tenNeed.getValue(), 0.001);
     }
@@ -164,7 +164,7 @@ public class NeedTest {
     @Test
     public void testPerformDecayBelowThreshold() {
         // Create need close to threshold: value=35, decayRate=10, threshold=30
-        need criticalNeed = new need(35, 10, 30.0);
+        Need criticalNeed = new Need(35, 10, 30.0);
         boolean isCritical = criticalNeed.performDecay();
         assertEquals(25.0, criticalNeed.getValue(), 0.001); // 35 - 10 = 25
         assertTrue(isCritical); // 25 < 30
@@ -177,7 +177,7 @@ public class NeedTest {
     @Test
     public void testPerformDecayAtThreshold() {
         // Create need at threshold: value=30, decayRate=0.1, threshold=30
-        need atThresholdNeed = new need(30, 1, 30.0);
+        Need atThresholdNeed = new Need(30, 1, 30.0);
         boolean isCritical = atThresholdNeed.performDecay();
         assertEquals(29.0, atThresholdNeed.getValue(), 0.001); // 30 - 1 = 29
         assertTrue(isCritical); // 29 < 30
@@ -189,7 +189,7 @@ public class NeedTest {
      */
     @Test
     public void testPerformDecayMultipleTimes() {
-        need testNeed = new need(50, 5, 30.0);
+        Need testNeed = new Need(50, 5, 30.0);
         // First decay: 50 - 5 = 45, not critical
         boolean isCritical1 = testNeed.performDecay();
         assertEquals(45.0, testNeed.getValue(), 0.001);
@@ -223,7 +223,7 @@ public class NeedTest {
     @Test
     public void testPerformDecayClamping() {
         // Test decay that would go below 0
-        need lowNeed = new need(2, 5, 30.0);
+        Need lowNeed = new Need(2, 5, 30.0);
         boolean isCritical = lowNeed.performDecay();
         assertEquals(0.0, lowNeed.getValue(), 0.001); // 2 - 5 = -3, clamped to 0
         assertTrue(isCritical); // 0 < 30
@@ -235,7 +235,7 @@ public class NeedTest {
      */
     @Test
     public void testZeroDecayRate() {
-        need noDecayNeed = new need(50, 0, 30.0);
+        Need noDecayNeed = new Need(50, 0, 30.0);
         boolean isCritical = noDecayNeed.performDecay();
         assertEquals(50.0, noDecayNeed.getValue(), 0.001); // No change
         assertFalse(isCritical);

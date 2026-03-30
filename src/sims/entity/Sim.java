@@ -3,7 +3,7 @@ package sims.entity;
 import sims.actions.Activity;
 import sims.actions.SkillManager;
 import sims.career.Career;
-import sims.needs.need;
+import sims.needs.Need;
 import sims.world.Home;
 import sims.world.HomeLocation;
 import sims.world.Loc;
@@ -38,7 +38,7 @@ public class Sim {
     private int activityEnd = -1;
 
     /** The dictionary of needs for this Sim. */
-    private Map<String, need> needDict = new HashMap<>();
+    private Map<String, Need> needDict = new HashMap<>();
 
     /** The home associated with this Sim. */
     private Home home;
@@ -146,7 +146,7 @@ public class Sim {
 
 
     /** @return the dictionary of needs for this Sim */
-    public Map<String, need> getNeeds() {
+    public Map<String, Need> getNeeds() {
         return needDict;
     }
 
@@ -228,7 +228,7 @@ public class Sim {
      *
      * @param needDict the map of needs
      */
-    public void setNeeds(Map<String, need> needDict){
+    public void setNeeds(Map<String, Need> needDict){
         this.needDict = needDict;
     }
 
@@ -354,7 +354,7 @@ public class Sim {
      */
     public void performDecay(String need, Sim currentSim, int time)
     {
-            for (Map.Entry<String, need> entry : needDict.entrySet()) {
+            for (Map.Entry<String, Need> entry : needDict.entrySet()) {
                 if (currentSim == this) {
                     if (entry.getKey() != need) {
                         entry.getValue().performDecay();
